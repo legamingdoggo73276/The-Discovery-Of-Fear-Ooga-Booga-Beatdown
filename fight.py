@@ -1,4 +1,6 @@
 import random
+from stats import *
+
 
 #Function for the battle. Takes 5 parameters (1 string 4 ints) and will take the player stats from Stats.py once that works.
 def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemySpeed):
@@ -63,4 +65,4 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
     return "enemy vanquished"
 
 
-print(battle("ghoul", 5, 50, 10, 100, 10, 10))
+print(battle("ghoul", 5, 50, playerStr, playerHP, playerSpeed, 10))

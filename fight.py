@@ -1,19 +1,39 @@
 import random
-from stats import *
+import pygame
+pygame.font.init()
 
+clock = pygame.time.Clock()
+
+font = pygame.font.SysFont('Comic Sans MS', 30)
+combat = pygame.display.set_mode((1200,800))
+pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
+
+combat_message = "Error"
 
 #Function for the battle. Takes 5 parameters (1 string 4 ints) and will take the player stats from Stats.py once that works.
 def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemySpeed):
 
-    #Message displayed once at beginning of battle
-    message = f"A {enemyType} attacks you! \nStrength: {enemyStr} \nHP: {enemyHP}\n \nYour strength: {playerStr}\nYour HP: {playerHP}"
+    #combat_message displayed once at beginning of battle
+    combat_message = f"A {enemyType} attacks you! \nStrength: {enemyStr} \nHP: {enemyHP}\n \nYour strength: {playerStr}\nYour HP: {playerHP}"
 
     #this loop keeps going until the end of the battle
     fighting = True
     while fighting:
-        #prints the current message
-        print (message)
-        #user input for their action
+        #for loop so the close button works: DO NOT MODIFY
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+    
+        clock.tick(60)
+        combat.fill((255, 255, 255))
+
+        text_surface = font.render(combat_message , False, (0, 0, 0))
+
+        combat.blit(text_surface, (600,400))
+
+
+        pygame.display.update()
+
         action = int(input("0 to attack, 1 to open bag, 2 to run "))
 
         #if the user chooses to attack
@@ -26,7 +46,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 playerHP -= enemyStr
                 if playerHP <= 0:
                     return "player loss"
-                message = f'You attacked the {enemyType}, dealing {playerStr} damage! \nThe {enemyType} attacks you, dealing {enemyStr} damage. \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
+                combat_message = f'You attacked the {enemyType}, dealing {playerStr} damage! \nThe {enemyType} attacks you, dealing {enemyStr} damage. \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
             #same code except if the enemy is faster
             else:
                 playerHP -= enemyStr
@@ -35,7 +55,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 enemyHP -= playerStr
                 if enemyHP <= 0:
                     fighting = False
-                message = f'The {enemyType} attacks you, dealing {enemyStr} damage. \nYou attacked the {enemyType}, dealing {playerStr} damage! \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
+                combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. \nYou attacked the {enemyType}, dealing {playerStr} damage! \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
                 
         #This is a placeholder until we code inventory.
         elif action == 1:
@@ -47,22 +67,22 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             #if sucessful, ends battle
             if run <= 1:
                 print("You ran away!")
-                return "player flees"
+                return "You ran away!"
             #if unsucessful, enemy attacks as normal and your turn is skipped.
             else:
                 playerHP -= enemyStr
                 if playerHP <= 0:
                     return "player loss"
-                #new message describing failed escape. Sucess does not need a message as loop is exited.
-                message = f"You could not get away. The ghoul attacked you.\nEnemy HP: {enemyHP} \nPlayer HP: {playerHP}"
+                #new combat_message describing failed escape. Sucess does not need a combat_message as loop is exited.
+                combat_message = f"You could not get away. The {enemyType} attacked you.\nEnemy HP: {enemyHP} \nPlayer HP: {playerHP}"
 
         #This will be removed eventually. It is to find errors.
         else:
             print("force quit")
             fighting = False
-
     #Default return. If the loop is exited without any return value.
     return "enemy vanquished"
+    #DO NOT DELETE
+    pygame.quit()
 
-
-print(battle("ghoul", 5, 50, playerStr, playerHP, playerSpeed, 10))
+        

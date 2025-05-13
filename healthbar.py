@@ -35,7 +35,7 @@ health_bar = HealthBar(980, 50, 200, 30, 100)
 
 run = True
 while run:
-    screen.fill("indigo")
+    #update healthbar whenever damage is taken
     health_bar.hp = 50
     health_bar.draw(screen)
     screen.blit(heart,(950,5))

@@ -1,4 +1,5 @@
 import pygame
+from stats import *
 
 pygame.init()
 
@@ -21,14 +22,14 @@ class HealthBar():
         self.y = y 
         self. w = w
         self.h = h
-        self.hp = max_hp
-        self.max_hp = max_hp
+        self.hp = playerHP
+        self.max_hp = maxPHP
 
     def draw(self, surface):
         #calculate health ratio
         ratio = self.hp / self.max_hp
         pygame.draw.rect(surface, "black", (self.x, self.y, self.w, self.h))
-        #d04f5a
+        #COLOUR: d04f5a
         pygame.draw.rect(surface, heart_red, (self.x, self.y, self.w * ratio, self.h))
 
 health_bar = HealthBar(980, 50, 200, 30, 100)
@@ -36,7 +37,7 @@ health_bar = HealthBar(980, 50, 200, 30, 100)
 run = True
 while run:
     #update healthbar whenever damage is taken
-    health_bar.hp = 50
+    health_bar.hp = playerHP
     health_bar.draw(screen)
     screen.blit(heart,(950,5))
     

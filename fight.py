@@ -1,6 +1,8 @@
 import random
 import pygame
+pygame.init()
 pygame.font.init()
+from healthbar import *
 
 clock = pygame.time.Clock()
 
@@ -22,15 +24,18 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
         #for loop so the close button works: DO NOT MODIFY
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                fighting = False
     
         clock.tick(60)
-        combat.fill((255, 255, 255))
+        combat.fill((69, 69, 69))
 
-        text_surface = font.render(combat_message , False, (0, 0, 0))
+        text_surface = font.render(combat_message , False, (255, 255, 255))
 
-        combat.blit(text_surface, (600,400))
-
+        health_bar.hp = playerHP
+        health_bar.draw(combat)
+        combat.blits(((text_surface, (600,400)), (heart,(950,5))))
+    
+        pygame.display.flip()
 
         pygame.display.update()
 
@@ -83,6 +88,5 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
     #Default return. If the loop is exited without any return value.
     return "enemy vanquished"
     #DO NOT DELETE
-    pygame.quit()
 
         

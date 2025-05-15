@@ -33,21 +33,3 @@ class HealthBar():
         pygame.draw.rect(surface, heart_red, (self.x, self.y, self.w * ratio, self.h))
 
 health_bar = HealthBar(980, 50, 200, 30, 100)
-
-run = True
-while run:
-    #update healthbar whenever damage is taken
-    health_bar.hp = playerHP
-    health_bar.draw(screen)
-    screen.blit(heart,(950,5))
-    
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-            
-    pygame.display.flip()
-
-pygame.quit()
-
-

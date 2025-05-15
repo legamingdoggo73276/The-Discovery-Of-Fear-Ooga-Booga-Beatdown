@@ -1,6 +1,6 @@
 import pygame
 from fight import battle
-from stats import *
+import stats
 from healthbar import *
 pygame.font.init()
 pygame.init()
@@ -27,12 +27,11 @@ while running:
     win.fill((69, 69, 69))
 
     text_surface = font.render(result , False, (255, 255, 255))
-    health_bar.hp = playerHP
+
+    health_bar.hp = stats.playerHP
     health_bar.draw(win)
+
     win.blits(((text_surface, (600,400)), (heart,(950,5))))
-
-    win.blit(text_surface, (300,200))
-
 
     pygame.display.update()
 #DO NOT DELETE

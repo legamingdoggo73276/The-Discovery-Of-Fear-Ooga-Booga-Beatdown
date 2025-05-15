@@ -3,6 +3,8 @@ import pygame
 pygame.init()
 pygame.font.init()
 from healthbar import *
+from Textrender import *
+import stats
 
 clock = pygame.time.Clock()
 
@@ -29,11 +31,10 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
         clock.tick(60)
         combat.fill((69, 69, 69))
 
-        text_surface = font.render(combat_message , False, (255, 255, 255))
-
         health_bar.hp = playerHP
         health_bar.draw(combat)
-        combat.blits(((text_surface, (600,400)), (heart,(950,5))))
+        blit_text(combat, combat_message, (600,400), font)
+        combat.blit (heart,(950,5))
     
         pygame.display.flip()
 
@@ -64,7 +65,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 
         #This is a placeholder until we code inventory.
         elif action == 1:
-            print("Bag opened")
+            print("(Inventory coming soon!)")
 
         #If the user chooses to run away. 66% chance of sucess.
         elif action == 2:
@@ -72,6 +73,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             #if sucessful, ends battle
             if run <= 1:
                 print("You ran away!")
+                stats.playerHP = playerHP
                 return "You ran away!"
             #if unsucessful, enemy attacks as normal and your turn is skipped.
             else:
@@ -86,7 +88,6 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             print("force quit")
             fighting = False
     #Default return. If the loop is exited without any return value.
+    stats.playerHP = playerHP
     return "enemy vanquished"
-    #DO NOT DELETE
-
-        
+    

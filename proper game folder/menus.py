@@ -20,14 +20,13 @@ button2.center = (200, 500)
 bg = (69, 69, 69)
 
 def cell_change_anim(col_1, col_2):
-    time_count = 0
     fadeIn = pygame.Surface((window_width, window_height)).convert_alpha()
     fadeIn.set_alpha(0)
     fadeIn.fill("black")
     for i in range(0, 260, 5):
         blits()
-        fadeIn.set_alpha(i)
         win.blit(fadeIn, (0, 0))
+        fadeIn.set_alpha(i)
         pygame.display.update()
         pygame.time.wait(20)
     fadeIn.set_alpha(0)
@@ -47,6 +46,7 @@ def cell_change_anim(col_1, col_2):
 
 def blits():
     win.blits(((image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
+
 while True:
     win.fill(bg)
     for events in pygame.event.get():

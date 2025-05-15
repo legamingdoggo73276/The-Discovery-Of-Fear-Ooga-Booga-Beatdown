@@ -1,4 +1,5 @@
 import pygame
+from fight import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -21,6 +22,7 @@ clock = pygame.time.Clock()
 cave1 = pygame.image.load("images/cave1.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
 arrow = pygame.image.load("images/caveman.png").convert_alpha()
+back = pygame.image.load("images/back.png").convert_alpha()
 fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 arrow = pygame.transform.scale(arrow, (75, 75))
@@ -203,7 +205,12 @@ class cell_1(Map):
         
     def blits(self):
         #win.blits(((self.colour, (0, 0)), (arrow, player)))
-        win.blits(((self.colour, (0, 0)),(self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (self.imgs[2], self.rects[2]), (arrow, player)))
+        win.blits(((self.colour, (0, 0)),(self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (self.imgs[2], self.rects[2])))
+        if Map.facing == "up":
+            win.blit(back, player)
+        else:
+            win.blit(arrow, player)
+
 
 class cell_2(Map):
     img_1 = pygame.transform.scale(rock, (100, 100))
@@ -224,7 +231,11 @@ class cell_2(Map):
         Map()
         
     def blits(self):
-        win.blits(((self.colour, (0, 0)), (self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (arrow, player)))
+        win.blits(((self.colour, (0, 0)), (self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1])))
+        if Map.facing == "up":
+            win.blit(back, player)
+        else:
+            win.blit(arrow, player)
 
 class cell_3(Map):
     colour = "blue"

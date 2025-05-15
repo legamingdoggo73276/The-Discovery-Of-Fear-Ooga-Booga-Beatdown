@@ -8,7 +8,7 @@ pygame.display.set_caption("Main Menu")
 font = pygame.font.Font("who-asks-satan.ttf", 40)
 surf = font.render("Quit", True, "red")
 surf2 = font.render("Start", True, "red")
-image1 = pygame.image.load("button.png").convert_alpha()
+image1 = pygame.image.load("images/button.png").convert_alpha()
 image2 = pygame.transform.scale(image1, (100, 60))
 image1 = pygame.transform.scale(image1, (80, 60))
 

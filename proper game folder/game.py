@@ -18,11 +18,11 @@ pygame.display.set_caption("map testing")
 clock = pygame.time.Clock()
 
 #loading images and creating player
-cave1 = pygame.image.load("cave1.png").convert_alpha()
-cave2 = pygame.image.load("cave2.png").convert_alpha()
-arrow = pygame.image.load("caveman.png").convert_alpha()
-fire = pygame.image.load("fire.png").convert_alpha()
-rock = pygame.image.load("rock.png").convert_alpha()
+cave1 = pygame.image.load("images/cave1.png").convert_alpha()
+cave2 = pygame.image.load("images/cave2.png").convert_alpha()
+arrow = pygame.image.load("images/caveman.png").convert_alpha()
+fire = pygame.image.load("images/fire.png").convert_alpha()
+rock = pygame.image.load("images/rock.png").convert_alpha()
 arrow = pygame.transform.scale(arrow, (75, 75))
 player = arrow.get_rect(center=((window_width/2), (window_height/2)))
 

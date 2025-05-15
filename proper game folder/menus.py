@@ -1,62 +1,52 @@
 import pygame
+from game import *
 pygame.init()
 
-win = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("pygame button")
+win = pygame.display.set_mode((window_width, window_height))
+pygame.display.set_caption("Main Menu")
 
 font = pygame.font.Font("who-asks-satan.ttf", 40)
-#font.set_italic(True)
-surf = font.render("Quit", True, "white")
-surf2 = font.render("thingy", True, "white")
-arrow = pygame.image.load("arrow_2.PNG").convert_alpha()
-arrow = pygame.transform.scale(arrow, (100, 100))
+surf = font.render("Quit", True, "red")
+surf2 = font.render("Start", True, "red")
 image1 = pygame.image.load("button.png").convert_alpha()
-image2 = pygame.transform.scale(image1, (160, 60))
-image1 = pygame.transform.scale(image1, (110, 60))
+image2 = pygame.transform.scale(image1, (100, 60))
+image1 = pygame.transform.scale(image1, (80, 60))
 
 button = image1.get_rect()
 button2 = image2.get_rect()
 button.center = (200, 200)
 button2.center = (200, 500)
 
-bg = "pink"
+bg = (69, 69, 69)
 
 def cell_change_anim(col_1, col_2):
     time_count = 0
-    fadeIn = pygame.Surface((800, 600)).convert_alpha()
+    fadeIn = pygame.Surface((window_width, window_height)).convert_alpha()
     fadeIn.set_alpha(0)
     fadeIn.fill("black")
     for i in range(0, 260, 5):
-        if col_1 != 0:
-            win.fill((col_1))
-        else:
-            win.blit(image_1, (0, 0))
-        #pygame.draw.rect(win, Colours.WHITE, player)
+        blits()
         fadeIn.set_alpha(i)
         win.blit(fadeIn, (0, 0))
         pygame.display.update()
-        pygame.time.wait(10)
-    #player.y = y_pos
+        pygame.time.wait(20)
     fadeIn.set_alpha(0)
 
-    fadeOut = pygame.Surface((800, 600)).convert_alpha()
+    fadeOut = pygame.Surface((window_width, window_height)).convert_alpha()
     fadeOut.set_alpha(255)
     fadeOut.fill("black")
     alpha = 255
     while alpha > 0:
-        if col_2 != 0:
-            win.fill((col_2))
-        else:
-            win.blit(image_2, (0, 0))
-        #pygame.draw.rect(win, Colours.WHITE, player)
+        cell_1.blits(cell_1)
         fadeOut.set_alpha(alpha)
         win.blit(fadeOut, (0, 0))
         pygame.display.update()
-        pygame.time.wait(10)
+        pygame.time.wait(20)
         alpha -= 5
 
 
-        
+def blits():
+    win.blits(((image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
 while True:
     win.fill(bg)
     for events in pygame.event.get():
@@ -67,6 +57,7 @@ while True:
                 pygame.quit()
             elif button2.collidepoint(events.pos):
                 cell_change_anim("pink", "grey")
+                Map()
                 bg = ("grey")
                 
         a, b = pygame.mouse.get_pos()
@@ -84,11 +75,5 @@ while True:
             surf2.set_alpha(255)
         
         
-        
-        win.blit(image1, (button.x, button.y))
-        win.blit(image2, (button2.x, button2.y))
-        win.blit(surf, (button.x +10, button.y + 5))
-        win.blit(surf2, (button2.x +10, button2.y +5))
-        win.blit(arrow, (100, 100))
-
+        blits()
         pygame.display.update()

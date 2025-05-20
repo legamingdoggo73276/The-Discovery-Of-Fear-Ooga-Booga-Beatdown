@@ -21,7 +21,10 @@ pygame.display.set_caption("map testing")
 clock = pygame.time.Clock()
 
 #loading images and creating player
-cave1 = pygame.image.load("images/cave1.png").convert_alpha()
+floor1 = pygame.image.load("images/mainfloor.png").convert_alpha()
+topright = pygame.image.load("images/wall_topright.png").convert_alpha()
+midright = pygame.image.load("images/wall_midright.png").convert_alpha()
+botright = pygame.image.load("images/wall_botright.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
 arrow = pygame.image.load("images/caveman.png").convert_alpha()
 back = pygame.image.load("images/back.png").convert_alpha()
@@ -66,27 +69,30 @@ def cell_change_anim(x_pos, y_pos, c1, c2):
 
 class Map:
     #these variables get changed when cells are entered
+    wall_1 = pygame.transform.scale(topright, (426, 240))
+    wall_1_rect = wall_1.get_rect(center=(1100, 160))
+    wall_2 = pygame.transform.scale(midright, (184, 376))
+    wall_2_rect = wall_2.get_rect(center=(1112, 508))
+    wall_3 = pygame.transform.scale(botright, (640, 232))
+    wall_3_rect = wall_3.get_rect(center=(1200, 800))
     img_1 = pygame.transform.scale(rock, (200, 100))
     img_2 = pygame.transform.scale(rock, (500, 100))
     img_3 = pygame.transform.scale(fire, (100, 100))
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
-    #colour = Colours.GREY
-    colour = pygame.transform.scale(cave1, (1200, 800))
+    bg = pygame.transform.scale(floor1, (1200, 800))
     stage = "main"
     running = True
-    #obstacles = [obstacle_1, obstacle_2, obstacle_3]
-    obstacles = [obstacle_3]
-
-    imgs = [img_1, img_2, img_3]
+    obstacles = [obstacle_1, obstacle_2, obstacle_3, wall_1_rect, wall_2_rect]
+    imgs = [img_1, img_2, img_3, wall_1, wall_2]
     combat_1 = False
     facing = "down"
                 
     def __init__(self):
         #starts game
         if self.running == True:
-            Map.game(Map.colour, Map.stage, Map.running)
+            Map.game(Map.bg, Map.stage, Map.running)
             
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
@@ -96,7 +102,7 @@ class Map:
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
-            pygame.time.wait(100)
+            pygame.time.wait(100000)
 
             Map.combat_1 = True
             
@@ -197,19 +203,23 @@ class Map:
 
 class cell_1(Map):
     #cell_1 variables
+    wall_1 = pygame.transform.scale(topright, (426, 240))
+    wall_1_rect = wall_1.get_rect(center=(987, 120))
+    wall_2 = pygame.transform.scale(midright, (138, 282))
+    wall_2_rect = wall_2.get_rect(center=(600, 400))
+    wall_3 = pygame.transform.scale(botright, (480, 174))
+    wall_3_rect = wall_3.get_rect(center=(962, 713))
     img_1 = pygame.transform.scale(rock, (200, 100))
     img_2 = pygame.transform.scale(rock, (500, 100))
     img_3 = pygame.transform.scale(fire, (100, 100))
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
-    #colour = Colours.GREY
-    colour = pygame.transform.scale(cave1, (window_width, window_height))
+    bg = pygame.transform.scale(floor1, (window_width, window_height))
     stage = "main"
-    #rects = [obstacle_1, obstacle_2, obstacle_3]
-    rects = [obstacle_3]
-
-    imgs = [img_1, img_2, img_3]
+    rects = [obstacle_1, obstacle_2, obstacle_3, wall_1_rect, wall_2_rect,
+             wall_3_rect]
+    imgs = [img_1, img_2, img_3, wall_1, wall_2, wall_3]
     def __init__(self):
         #Map.colour = self.colour
         Map.stage = self.stage
@@ -218,9 +228,11 @@ class cell_1(Map):
         Map()
         
     def blits(self):
-        #win.blits(((self.colour, (0, 0)), (arrow, player)))
-        #win.blits(((self.colour, (0, 0)),(self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (self.imgs[2], self.rects[2])))
-        win.blits(((self.colour, (0, 0)), (self.imgs[2], self.rects[0])))
+        win.blits(((self.bg, (0, 0)), (self.imgs[3], self.rects[3]),
+                   (self.imgs[5], self.rects[5]),
+                   (self.imgs[4], self.rects[4]), (self.imgs[0], self.rects[0]),
+                   (self.imgs[1], self.rects[1]),(self.imgs[2], self.rects[2])
+                   ))
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -287,4 +299,4 @@ class cell_6(Map):
         Map()
     
         
-#Map()
+Map()

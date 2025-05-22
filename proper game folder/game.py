@@ -1,5 +1,7 @@
 import pygame
-from fight import *
+from fight import battle
+import stats
+from healthbar import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -25,6 +27,8 @@ arrow = pygame.image.load("images/caveman.png").convert_alpha()
 back = pygame.image.load("images/back.png").convert_alpha()
 fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
+end = pygame.image.load("images/death.png").convert_alpha()
+end = pygame.transform.scale(end, (1200, 800))
 arrow = pygame.transform.scale(arrow, (75, 75))
 player = arrow.get_rect(center=((window_width/2), (window_height/2)))
 
@@ -72,7 +76,9 @@ class Map:
     colour = pygame.transform.scale(cave1, (1200, 800))
     stage = "main"
     running = True
-    obstacles = [obstacle_1, obstacle_2, obstacle_3]
+    #obstacles = [obstacle_1, obstacle_2, obstacle_3]
+    obstacles = [obstacle_3]
+
     imgs = [img_1, img_2, img_3]
     combat_1 = False
     facing = "down"
@@ -85,7 +91,13 @@ class Map:
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
-            print("whoa")
+            result = battle("Mole Rat", 100, 50, playerStr, playerHP, playerSpeed, 10)
+            print(stats.playerHP)
+            while stats.playerHP <= 0:
+                win.blit(end, (0, 0))
+                pygame.display.update()
+            pygame.time.wait(100)
+
             Map.combat_1 = True
             
     def game(bg, cell, run):
@@ -98,7 +110,7 @@ class Map:
             #gets player positions as variables
             player_x = player.x
             player_y = player.y
-            speed = 10
+            speed = 5
             
             #sets fps
             clock.tick(60)
@@ -142,7 +154,7 @@ class Map:
                     cell_change_anim(player_x, (window_height - 101), cell_1, cell_2)
                     #calls cell_2 function
                     cell_2()
-                elif player.bottom >= window_height:
+                '''elif player.bottom >= window_height:
                     cell_change_anim(player_x, 1, cell_1, cell_3)
                     cell_3()
                 elif player.right >= window_width:
@@ -150,7 +162,7 @@ class Map:
                     cell_4()
                 elif player.left <= 0:
                     cell_change_anim((window_width - 101), player_y, cell_1, cell_6)
-                    cell_6()
+                    cell_6()'''
                     
             #when player is in cell_2 (go up from main cell), displays sprites from cell_2
             elif cell == "up":
@@ -194,7 +206,9 @@ class cell_1(Map):
     #colour = Colours.GREY
     colour = pygame.transform.scale(cave1, (window_width, window_height))
     stage = "main"
-    rects = [obstacle_1, obstacle_2, obstacle_3]
+    #rects = [obstacle_1, obstacle_2, obstacle_3]
+    rects = [obstacle_3]
+
     imgs = [img_1, img_2, img_3]
     def __init__(self):
         #Map.colour = self.colour
@@ -205,7 +219,9 @@ class cell_1(Map):
         
     def blits(self):
         #win.blits(((self.colour, (0, 0)), (arrow, player)))
-        win.blits(((self.colour, (0, 0)),(self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (self.imgs[2], self.rects[2])))
+        #win.blits(((self.colour, (0, 0)),(self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (self.imgs[2], self.rects[2])))
+        win.blits(((self.colour, (0, 0)), (self.imgs[2], self.rects[0])))
+
         if Map.facing == "up":
             win.blit(back, player)
         else:
@@ -221,6 +237,8 @@ class cell_2(Map):
     colour = pygame.transform.scale(cave2, (window_width, window_height))
     stage = "up"
     rects = [obstacle_1, obstacle_2]
+    rects = []
+
     imgs = [img_1, img_2]
     def __init__(self):
         Map.combat_placeholder()
@@ -231,7 +249,9 @@ class cell_2(Map):
         Map()
         
     def blits(self):
-        win.blits(((self.colour, (0, 0)), (self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1])))
+        #win.blits(((self.colour, (0, 0)), (self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1])))
+        win.blit(self.colour, (0, 0))
+
         if Map.facing == "up":
             win.blit(back, player)
         else:

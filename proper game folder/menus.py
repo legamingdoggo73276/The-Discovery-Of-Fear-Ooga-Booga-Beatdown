@@ -1,5 +1,9 @@
+
 import pygame
 from game import *
+from fight import battle
+import stats
+from healthbar import *
 pygame.init()
 
 win = pygame.display.set_mode((window_width, window_height))
@@ -9,8 +13,10 @@ font = pygame.font.Font("who-asks-satan.ttf", 40)
 surf = font.render("Quit", True, "red")
 surf2 = font.render("Start", True, "red")
 image1 = pygame.image.load("images/button.png").convert_alpha()
+start = pygame.image.load("images/start.png").convert_alpha()
 image2 = pygame.transform.scale(image1, (100, 60))
 image1 = pygame.transform.scale(image1, (80, 60))
+start = pygame.transform.scale(start, (1200, 800))
 
 button = image1.get_rect()
 button2 = image2.get_rect()
@@ -45,10 +51,9 @@ def cell_change_anim(col_1, col_2):
 
 
 def blits():
-    win.blits(((image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
+    win.blits(((start, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
 
 while True:
-    win.fill(bg)
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
             pygame.quit()

@@ -12,7 +12,7 @@ screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Health Bar')
 #import heart for healthbar
-heart = pygame.image.load("images/HeartIcon2.png").convert_alpha()
+heart = pygame.image.load("images/heart.png").convert_alpha()
 heart = pygame.transform.scale(heart, (250,125))
 heart_red = (208,78,90,255)
 

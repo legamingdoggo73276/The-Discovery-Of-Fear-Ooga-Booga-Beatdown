@@ -94,18 +94,30 @@ class Map:
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
+            win.blit(Map.moleimg, (600, 400))
+            pygame.display.update()
+            pygame.time.wait(1000)
             for size in range(50, 1200, 10):
-                win.blit(Map.moleimg, (575-(size/1.5), 650-(size/1.5)))
+                win.blit(Map.moleimg, ((600-size/2), (400-size/1.5)))
                 Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))
                 
                 pygame.display.update()
+                pygame.time.wait(100)
 
             '''result = battle("Mole Rat", 100, 50, playerStr, playerHP, playerSpeed, 10)
             print(stats.playerHP)
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
-            pygame.time.wait(100000)'''
+            pygame.time.wait(100000)
+            win.blit(Map.moleimg, (600, 400))
+            pygame.display.update()
+
+            pygame.time.wait(1000)
+            Map.moleimg = pygame.transform.scale(Map.moleimg, (500, 500))
+            win.blit(Map.moleimg, (600, 50))
+            pygame.display.update()
+            pygame.time.wait(1000)'''
 
             Map.combat_1 = True
             

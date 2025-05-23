@@ -29,8 +29,8 @@ fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
-arrow = pygame.transform.scale(arrow, (75, 75))
-player = arrow.get_rect(center=((window_width/2), (window_height/2)))
+#arrow = pygame.transform.scale(arrow, (75, 75))
+player = player.get_rect(center=((window_width/2), (window_height/2)))
 
     
 #fade in and out when changing cells

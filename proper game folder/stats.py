@@ -1,3 +1,5 @@
+
+
 basePlayerHP = 100
 baseStr = 10
 playerStr = 0

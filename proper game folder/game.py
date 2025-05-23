@@ -21,13 +21,13 @@ pygame.display.set_caption("map testing")
 clock = pygame.time.Clock()
 
 #loading images and creating player
-cave1 = pygame.image.load("images/cave1.png").convert_alpha()
-cave2 = pygame.image.load("images/cave2.png").convert_alpha()
-arrow = pygame.image.load("images/caveman.png").convert_alpha()
-back = pygame.image.load("images/back.png").convert_alpha()
-fire = pygame.image.load("images/fire.png").convert_alpha()
-rock = pygame.image.load("images/rock.png").convert_alpha()
-end = pygame.image.load("images/death.png").convert_alpha()
+cave1 = pygame.image.load("cave1.png").convert_alpha()
+cave2 = pygame.image.load("cave2.png").convert_alpha()
+arrow = pygame.image.load("caveman.png").convert_alpha()
+back = pygame.image.load("back.png").convert_alpha()
+fire = pygame.image.load("fire.png").convert_alpha()
+rock = pygame.image.load("rock.png").convert_alpha()
+end = pygame.image.load("death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
 arrow = pygame.transform.scale(arrow, (75, 75))
 player = arrow.get_rect(center=((window_width/2), (window_height/2)))
@@ -90,13 +90,14 @@ class Map:
             
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
+        #TODO The death screen still isnt working properly.
         if Map.combat_1 == False:
-            result = battle("Mole Rat", 100, 50, playerStr, playerHP, playerSpeed, 10)
+            battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
             print(stats.playerHP)
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
-            pygame.time.wait(100)
+                pygame.quit()
 
             Map.combat_1 = True
             
@@ -114,6 +115,7 @@ class Map:
             
             #sets fps
             clock.tick(60)
+            
             #gets key presses
             keys = pygame.key.get_pressed()
 
@@ -143,6 +145,8 @@ class Map:
                 Map.facing = "right"
                 if player.collideobjects(Map.obstacles):
                     player.x -= speed
+            
+
             
 
             #displays sprites for each individual cell,
@@ -220,7 +224,10 @@ class cell_1(Map):
     def blits(self):
         #win.blits(((self.colour, (0, 0)), (arrow, player)))
         #win.blits(((self.colour, (0, 0)),(self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1]), (self.imgs[2], self.rects[2])))
-        win.blits(((self.colour, (0, 0)), (self.imgs[2], self.rects[0])))
+        win.blits(((self.colour, (0, 0)), (self.imgs[2], self.rects[0]),(heart,(950,5))))
+        #health bar stuff
+        health_bar.hp = stats.playerHP
+        health_bar.draw(win)
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -250,7 +257,10 @@ class cell_2(Map):
         
     def blits(self):
         #win.blits(((self.colour, (0, 0)), (self.imgs[0], self.rects[0]), (self.imgs[1], self.rects[1])))
-        win.blit(self.colour, (0, 0))
+        win.blits(((self.colour, (0, 0)), (heart,(950,5))))
+        #health bar stuff
+        health_bar.hp = stats.playerHP
+        health_bar.draw(win)
 
         if Map.facing == "up":
             win.blit(back, player)

@@ -6,13 +6,14 @@ pygame.font.init()
 from healthbar import *
 from Textrender import *
 import stats
+from game import *
 
 clock = pygame.time.Clock()
 
-font = pygame.font.Font("who-asks-satan.ttf", 40)
+font = pygame.font.Font('who-asks-satan.ttf', 40)
 combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
-molerat = pygame.image.load("images/molerat.png").convert_alpha()
+molerat = pygame.image.load("molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
 
 combat_message = "Error"
@@ -58,6 +59,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 if playerHP <= 0:
                     print("died")
                     stats.playerHP = playerHP
+                    
                     return "player loss"
                 combat_message = f'You attacked the {enemyType}, dealing {playerStr} damage! \nThe {enemyType} attacks you, dealing {enemyStr} damage. \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
             #same code except if the enemy is faster

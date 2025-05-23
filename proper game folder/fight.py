@@ -1,4 +1,3 @@
-
 import random
 import pygame
 pygame.init()
@@ -44,7 +43,8 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
         pygame.display.flip()
 
         pygame.display.update()
-
+        print(enemyStr)
+        print(playerHP)
         action = int(input("0 to attack, 1 to open bag, 2 to run "))
 
         #if the user chooses to attack
@@ -54,7 +54,6 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 enemyHP -= playerStr
                 if enemyHP <= 0:
                     fighting = False
-                playerHP -= 100
                 if playerHP <= 0:
                     print("died")
                     stats.playerHP = playerHP

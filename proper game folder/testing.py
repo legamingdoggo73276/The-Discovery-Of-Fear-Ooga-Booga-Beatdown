@@ -74,7 +74,6 @@ class Map:
     img_2 = pygame.transform.scale(rock, (500, 100))
     img_3 = pygame.transform.scale(fire, (100, 100))
     moleimg = pygame.transform.scale(mole, (50, 50))
-
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
@@ -94,30 +93,22 @@ class Map:
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
-            win.blit(Map.moleimg, (600, 400))
+            win.blit(Map.moleimg, (550, 350))
             pygame.display.update()
-            pygame.time.wait(1000)
-            for size in range(50, 1200, 10):
-                win.blit(Map.moleimg, ((600-size/2), (400-size/1.5)))
-                Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))
-                
+            pygame.time.wait(2000)
+            for size in range(50, 2000, 50):
+                win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
+                Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                
                 pygame.display.update()
-                pygame.time.wait(100)
-
-            '''result = battle("Mole Rat", 100, 50, playerStr, playerHP, playerSpeed, 10)
+                pygame.time.wait(10)
+                
+            result = battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
             print(stats.playerHP)
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
-            pygame.time.wait(100000)
-            win.blit(Map.moleimg, (600, 400))
-            pygame.display.update()
-
-            pygame.time.wait(1000)
-            Map.moleimg = pygame.transform.scale(Map.moleimg, (500, 500))
-            win.blit(Map.moleimg, (600, 50))
-            pygame.display.update()
-            pygame.time.wait(1000)'''
+                pygame.time.wait(5000)
+                pygame.quit()
 
             Map.combat_1 = True
             
@@ -267,7 +258,7 @@ class cell_2(Map):
     
     def __init__(self):
         Map.combat_placeholder()
-        Map.colour = self.colour
+        Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
         Map.imgs = self.imgs
@@ -289,28 +280,28 @@ class cell_3(Map):
     colour = "blue"
     stage = "down"
     def __init__(self):
-        Map.colour = self.colour
+        Map.bg = self.colour
         Map.stage = self.stage
         Map()
 class cell_4(Map):
     colour = "orange"
     stage = "right"
     def __init__(self):
-        Map.colour = self.colour
+        Map.bg = self.colour
         Map.stage = self.stage
         Map()
 class cell_5(Map):
     colour = "orange"
     stage = "up-right"
     def __init__(self):
-        Map.colour = self.colour
+        Map.bg = self.colour
         Map.stage = self.stage
         Map()
 class cell_6(Map):
     colour = "purple"
     stage = "left"
     def __init__(self):
-        Map.colour = self.colour
+        Map.bg = self.colour
         Map.stage = self.stage
         Map()
     

@@ -4,6 +4,7 @@ from fight import battle
 import stats
 from healthbar import *
 from menus import *
+from audio import *
 pygame.font.init()
 pygame.init()
 
@@ -24,6 +25,11 @@ image2 = pygame.transform.scale(image1, (100, 60))
 image1 = pygame.transform.scale(image1, (80, 60))
 start = pygame.transform.scale(start, (1200, 800))
 
+buttonaudio = pygame.mixer.Sound(sound_collection[0])
+menumusic = pygame.mixer.music.load(music_collection[0])
+#call menu music before main loop
+music(menumusic)
+
 button = image1.get_rect()
 button2 = image2.get_rect()
 button.center = (200, 200)
@@ -31,6 +37,7 @@ button2.center = (200, 500)
 
 def blits():
     win.blits(((start, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
+
 
 running = True
 while running:
@@ -40,8 +47,12 @@ while running:
                 running = False
             if events.type == pygame.MOUSEBUTTONDOWN:
                 if button.collidepoint(events.pos):
+                    sound(buttonaudio)
+                    pygame.time.wait(400)
                     pygame.quit()
                 elif button2.collidepoint(events.pos):
+                    sound(buttonaudio)
+                    pygame.mixer.music.fadeout(1000)
                     cell_change_anim("pink", "grey")
                     Map()
                     bg = ("grey")

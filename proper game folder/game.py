@@ -2,6 +2,7 @@ import pygame
 from fight import battle
 import stats
 from healthbar import *
+from audio import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -31,6 +32,13 @@ end = pygame.image.load("death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
 arrow = pygame.transform.scale(arrow, (75, 75))
 player = arrow.get_rect(center=((window_width/2), (window_height/2)))
+
+#needed audios
+current_music = None
+campfire = pygame.mixer.music.load(music_collection[2])
+cave = pygame.mixer.music.load(music_collection[1])
+encounter = pygame.mixer.Sound(sound_collection[1])
+music(cave)
 
     
 #fade in and out when changing cells

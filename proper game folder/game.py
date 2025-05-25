@@ -38,7 +38,8 @@ current_music = None
 campfire = pygame.mixer.music.load(music_collection[2])
 cave = pygame.mixer.music.load(music_collection[1])
 encounter = pygame.mixer.Sound(sound_collection[1])
-music(cave)
+#music(cave)
+#testing..
 
     
 #fade in and out when changing cells

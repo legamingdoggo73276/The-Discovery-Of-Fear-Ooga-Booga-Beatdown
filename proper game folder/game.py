@@ -98,13 +98,23 @@ class Map:
             
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
-        #TODO The death screen still isnt working properly.
         if Map.combat_1 == False:
-            battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
+            win.blit(Map.moleimg, (550, 350))
+            pygame.display.update()
+            pygame.time.wait(2000)
+            #makes the mole grow and start combat
+            for size in range(50, 2000, 50):
+                win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
+                Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                
+                pygame.display.update()
+                pygame.time.wait(10)
+                
+            result = battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
             print(stats.playerHP)
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
+                pygame.time.wait(5000)
                 pygame.quit()
 
             Map.combat_1 = True

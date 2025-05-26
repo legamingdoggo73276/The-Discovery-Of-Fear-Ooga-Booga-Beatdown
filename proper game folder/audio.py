@@ -12,6 +12,6 @@ def sound(audio):
 
 #can keep them as individual variables or just a list and call from list !!
 music_collection = ["menu.mp3", "cave.mp3", "fire.mp3"]
-sound_collection = ["button.mp3", "encounter.mp3"]
+sound_collection = ["button.mp3", "encounter.mp3", "punch.mp3", "obtain_item.mp3"]
 
 

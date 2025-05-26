@@ -35,7 +35,7 @@ player = arrow.get_rect(center=((window_width/2), (window_height/2)))
 
 #needed audios
 current_music = None
-campfire = pygame.mixer.music.load(music_collection[2])
+fire = pygame.mixer.music.load(music_collection[2])
 cave = pygame.mixer.music.load(music_collection[1])
 encounter = pygame.mixer.Sound(sound_collection[1])
 #testing..
@@ -218,7 +218,7 @@ class cell_1(Map):
 
     #testing
     #music(cave)
-    #music(campfire)
+    #music(fire)
     
     #colour = Colours.GREY
     colour = pygame.transform.scale(cave1, (window_width, window_height))

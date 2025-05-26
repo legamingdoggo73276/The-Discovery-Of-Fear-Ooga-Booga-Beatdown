@@ -102,7 +102,7 @@ class Map:
             win.blit(Map.moleimg, (550, 350))
             pygame.display.update()
             pygame.time.wait(2000)
-            #sound(encounter)
+            sound(encounter)
             #makes the mole grow and start combat
             for size in range(50, 2000, 50):
                 win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
@@ -227,9 +227,6 @@ class cell_1(Map):
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
 
-    #testing
-    #music(cave)
-    #music(fire)
     
     #colour = Colours.GREY
     colour = pygame.transform.scale(cave1, (window_width, window_height))
@@ -239,6 +236,9 @@ class cell_1(Map):
 
     imgs = [img_1, img_2, img_3]
     def __init__(self):
+        #add music
+        music(cave)
+        music(fire)
         #Map.colour = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects

@@ -102,6 +102,7 @@ class Map:
             win.blit(Map.moleimg, (550, 350))
             pygame.display.update()
             pygame.time.wait(2000)
+            #sound(encounter)
             #makes the mole grow and start combat
             for size in range(50, 2000, 50):
                 win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))

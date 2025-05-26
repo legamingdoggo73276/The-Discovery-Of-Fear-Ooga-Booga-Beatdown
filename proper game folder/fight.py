@@ -7,6 +7,7 @@ from healthbar import *
 from Textrender import *
 import stats
 from game import *
+from audio import * 
 
 clock = pygame.time.Clock()
 
@@ -15,6 +16,9 @@ combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
 molerat = pygame.image.load("molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
+#audio for combat
+#combatmusic = pygame.mixer.music.load
+#punch = pygame.mixer.Sound
 
 combat_message = "Error"
 
@@ -61,6 +65,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     stats.playerHP = playerHP
                     
                     return "player loss"
+                #import punch sound here sound(punch)
                 combat_message = f'You attacked the {enemyType}, dealing {playerStr} damage! \nThe {enemyType} attacks you, dealing {enemyStr} damage. \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
             #same code except if the enemy is faster
             else:
@@ -70,6 +75,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 enemyHP -= playerStr
                 if enemyHP <= 0:
                     fighting = False
+                #import punch sound here sound(punch)
                 combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. \nYou attacked the {enemyType}, dealing {playerStr} damage! \nEnemy HP: {enemyHP} \nPlayer HP:  {playerHP}'
                 
         #This is a placeholder until we code inventory.

@@ -16,7 +16,7 @@ combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
 molerat = pygame.image.load("molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
-#audio for combat
+#audio for combat (work in progress)
 #combatmusic = pygame.mixer.music.load
 #punch = pygame.mixer.Sound
 

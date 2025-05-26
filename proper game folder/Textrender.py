@@ -2,6 +2,8 @@
 import pygame
 pygame.init()
 
+#Inspired from code found on Stackoverflow. I did not know how to do this until I researched it there.
+
 def blit_text(surface, text, pos, font, color=pygame.Color('white')):
     words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
     space = font.size(' ')[0]  # The width of a space.

@@ -106,6 +106,7 @@ class Map:
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
+                pygame.time.wait(2000)
                 pygame.quit()
 
             Map.combat_1 = True

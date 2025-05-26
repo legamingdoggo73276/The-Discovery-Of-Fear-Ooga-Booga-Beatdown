@@ -7,6 +7,7 @@ from healthbar import *
 from Textrender import *
 import stats
 from game import *
+from audio import * 
 
 clock = pygame.time.Clock()
 
@@ -21,6 +22,9 @@ image1 = pygame.image.load("button.png").convert_alpha()
 #The molerat
 molerat = pygame.image.load("molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
+#audio for combat (work in progress)
+#combatmusic = pygame.mixer.music.load
+#punch = pygame.mixer.Sound
 
 #Text 
 attack_text = font.render("Attack", True, "red")

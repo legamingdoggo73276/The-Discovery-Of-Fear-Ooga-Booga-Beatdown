@@ -35,10 +35,9 @@ player = arrow.get_rect(center=((window_width/2), (window_height/2)))
 
 #needed audios
 current_music = None
-campfire = pygame.mixer.music.load(music_collection[2])
+fire = pygame.mixer.music.load(music_collection[2])
 cave = pygame.mixer.music.load(music_collection[1])
 encounter = pygame.mixer.Sound(sound_collection[1])
-#music(cave)
 #testing..
 
     
@@ -99,14 +98,24 @@ class Map:
             
     def combat_placeholder():
         #can call combat function here, makes it not repeat upon re-entering room
-        #TODO The death screen still isnt working properly.
         if Map.combat_1 == False:
-            battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
+            win.blit(Map.moleimg, (550, 350))
+            pygame.display.update()
+            pygame.time.wait(2000)
+            #sound(encounter)
+            #makes the mole grow and start combat
+            for size in range(50, 2000, 50):
+                win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
+                Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                
+                pygame.display.update()
+                pygame.time.wait(10)
+                
+            result = battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
             print(stats.playerHP)
             while stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
-                pygame.time.wait(2000)
+                pygame.time.wait(5000)
                 pygame.quit()
 
             Map.combat_1 = True
@@ -217,6 +226,11 @@ class cell_1(Map):
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
+
+    #testing
+    #music(cave)
+    #music(fire)
+    
     #colour = Colours.GREY
     colour = pygame.transform.scale(cave1, (window_width, window_height))
     stage = "main"

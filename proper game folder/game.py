@@ -216,6 +216,11 @@ class cell_1(Map):
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
+
+    #testing
+    #music(cave)
+    #music(campfire)
+    
     #colour = Colours.GREY
     colour = pygame.transform.scale(cave1, (window_width, window_height))
     stage = "main"

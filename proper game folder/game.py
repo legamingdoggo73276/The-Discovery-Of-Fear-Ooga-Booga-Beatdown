@@ -255,6 +255,10 @@ class cell_1(Map):
         #blits all the sprites for this room on the screen
         #the line under this is the background and the campfire
         win.blits(((self.bg, (0,0)), (self.imgs[2], self.rects[6])))
+        
+        #or place in game function place before while loop or after while loop
+        music(game_music)
+        sound(game_sound)
 
         #blits a different version of the caveman depending on which way you're facing
         if Map.facing == "up":

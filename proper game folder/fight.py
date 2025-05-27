@@ -23,11 +23,14 @@ punch = pygame.mixer.Sound(sound_collection[2])
 
 #The molerat
 molerat = pygame.image.load("molerat.png").convert_alpha()
+dead_molerat = pygame.image.load("dead_molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
+dead_molerat = pygame.transform.scale(dead_molerat, (1200,800))
 
 #Text 
 attack_text = font.render("Attack", True, "red")
 flee_text = font.render("Flee", True, "red")
+victory_text = font.render("You won!", True, "green")
 
 #The buttons
 image2 = pygame.transform.scale(image1, (150, 60))
@@ -46,6 +49,11 @@ button2.center = (1100, 700)
 def blits():
     combat.blits(((molerat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (strength, (900, 750))))
 
+def victory_blits():
+    combat.blits(((dead_molerat, (0,0)), (victory_text, (600,400))))
+    pygame.display.update()
+    pygame.time.wait(2000)
+
 
 #Function for the battle. Takes 5 parameters (1 string 4 ints) and will take the player stats from Stats.py once that works.
 def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemySpeed):
@@ -60,6 +68,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fighting = False
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button.collidepoint(event.pos):
                     sound(buttonaudio)
@@ -68,9 +77,6 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     if playerSpeed >= enemySpeed:
                         enemyHP -= playerStr
                         if enemyHP <= 0:
-                            combat_message = f"You defeated the {enemyType}!"
-                            blit_text(combat, combat_message, (100, 100), font, "red")
-                            pygame.time.wait(1000)
                             fighting = False
                         playerHP -= enemyStr
                         if playerHP <= 0:
@@ -85,11 +91,9 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                             return "player loss"
                         enemyHP -= playerStr
                         if enemyHP <= 0:
-                            combat_message = f"You defeated the {enemyType}!"
-                            blit_text(combat, combat_message, (100, 100), font, "red")
-                            pygame.time.wait(1000)
                             fighting = False
                         combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. |You attacked the {enemyType}, dealing {playerStr} damage! |Enemy HP: {enemyHP}'
+
                 elif button2.collidepoint(event.pos):
                     sound(buttonaudio)
                     pygame.time.wait(400)
@@ -126,11 +130,15 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             image2.set_alpha(255)
             flee_text.set_alpha(255)
         
-        blits()    
-        blit_text(combat, combat_message, (100, 100), font, "red")
-        health_bar.draw(combat)
-        combat.blit(heart,(950,5))
-    
+        if enemyHP > 0:
+            blits()    
+            blit_text(combat, combat_message, (100, 100), font, "red")
+            health_bar.draw(combat)
+            combat.blit(heart,(950,5))
+
+        else:
+            victory_blits()
+            fighting = False
         pygame.display.flip()
 
         pygame.display.update()

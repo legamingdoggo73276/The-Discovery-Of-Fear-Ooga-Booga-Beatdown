@@ -2,7 +2,6 @@ import pygame
 from fight import battle
 import stats
 from healthbar import *
-from audio import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -18,14 +17,13 @@ pygame.init()
 window_height = 800
 window_width = 1200
 win = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown")
+pygame.display.set_caption("map testing")
 clock = pygame.time.Clock()
 
 #loading images and creating player
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
-cave3 = pygame.image.load("images/cave3.png").convert_alpha()
 front = pygame.image.load("images/caveman.png").convert_alpha()
 back = pygame.image.load("images/back.png").convert_alpha()
 right = pygame.image.load('images/right.png').convert_alpha()
@@ -36,11 +34,6 @@ end = pygame.image.load("images/death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
-#needed audios
-current_music = None
-fire_audio = pygame.mixer.Sound(sound_collection[4])
-cave = music_collection[1]
-encounter = pygame.mixer.Sound(sound_collection[1])
     
 #fade in and out when changing cells
 def cell_change_anim(x_pos, y_pos, c1, c2):
@@ -71,7 +64,6 @@ def cell_change_anim(x_pos, y_pos, c1, c2):
 
 class Map:
     #these variables get changed when cells are entered
-    #they start as the same ones that are in cell_1
     rect1 = pygame.Rect(620, 625, 580, 175)
     rect2 = pygame.Rect(1095, 0, 105, 800)
     rect3 = pygame.Rect(700, 0, 555, 200)
@@ -85,7 +77,6 @@ class Map:
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
-    
     bg = pygame.transform.scale(cave1, (1200, 800))
     stage = "main"
     running = True
@@ -105,7 +96,6 @@ class Map:
             win.blit(Map.moleimg, (550, 350))
             pygame.display.update()
             pygame.time.wait(2000)
-            #makes the mole grow and start combat
             for size in range(50, 2000, 50):
                 win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
                 Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                
@@ -136,7 +126,6 @@ class Map:
             
             #sets fps
             clock.tick(60)
-            
             #gets key presses
             keys = pygame.key.get_pressed()
 
@@ -168,8 +157,6 @@ class Map:
                     player.x -= speed
             
 
-            
-
             #displays sprites for each individual cell,
             #and when player hits a border, changes the cell
             if cell == "main":
@@ -181,8 +168,13 @@ class Map:
                     cell_2()
                 '''elif player.bottom >= window_height:
                     cell_change_anim(player_x, 1, cell_1, cell_3)
-                    cell_3()'''
-                
+                    cell_3()
+                elif player.right >= window_width:
+                    cell_change_anim(1, player_y, cell_1, cell_4)
+                    cell_4()
+                elif player.left <= 0:
+                    cell_change_anim((window_width - 101), player_y, cell_1, cell_6)
+                    cell_6()'''
                     
             #when player is in cell_2 (go up from main cell), displays sprites from cell_2
             elif cell == "up":
@@ -190,16 +182,12 @@ class Map:
                 if player.bottom >= window_height:
                     cell_change_anim(player_x, 1, cell_2, cell_1)
                     cell_1()
-                elif player.top <= 0:
-                    cell_change_anim(player_x, (window_height - 101), cell_2, cell_3)
-                    cell_3()
 
             #cell_3 stuff (down from main)
-            elif cell == "up2":
-                cell_3.blits(cell_3)
-                if player.bottom >= window_height:
-                    cell_change_anim(player_x, 1, cell_3, cell_2)
-                    cell_2()
+            elif cell == "down":
+                if player.top <= 0:
+                    cell_change_anim(player_x, (window_height - 101), cell_3, cell_1)
+                    cell_1()
                     
             #cell_6 stuff (left from main)
             elif cell == "left":
@@ -244,11 +232,8 @@ class cell_1(Map):
         Map()
         
     def blits(self):
-        #blits all the sprites for this room on the screen
-        #the line under this is the background and the campfire
         win.blits(((self.bg, (0,0)), (self.imgs[2], self.rects[6])))
-
-        #blits a different version of the caveman depending on which way you're facing
+        
         if Map.facing == "up":
             win.blit(back, player)
         elif Map.facing == "right":
@@ -272,7 +257,7 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
-        #Map.combat_placeholder()
+        Map.combat_placeholder()
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -280,12 +265,8 @@ class cell_2(Map):
         Map()
         
     def blits(self):
-        #blits all the sprites on the screen
-        win.blit(self.colour, (0, 0)) #this one is the background
+        win.blit(self.colour, (0, 0))
 
-        if Map.combat_1 == False: #mole sprite, only if it hasnt been beaten
-            win.blit(Map.moleimg, (550, 350))
-            
         if Map.facing == "up":
             win.blit(back, player)
         elif Map.facing == "right":
@@ -296,30 +277,12 @@ class cell_2(Map):
             win.blit(front, player)
 
 class cell_3(Map):
-    rect1 = pygame.Rect(0, 0, 430, 800)
-    rect2 = pygame.Rect(680, 0, 510, 800)
-    colour = pygame.transform.scale(cave3, (window_width, window_height))
-    stage = "up2"
-    rects = [rect1, rect2]
-
+    colour = "blue"
+    stage = "down"
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
-        Map.obstacles = self.rects
         Map()
-        
-    def blits(self):
-        win.blit(self.colour, (0, 0))
-        pygame.draw.rect(win, 'white', self.rect1)
-        if Map.facing == "up":
-            win.blit(back, player)
-        elif Map.facing == "right":
-            win.blit(right, player)
-        elif Map.facing == "left":
-            win.blit(left, player)
-        else:
-            win.blit(front, player)
-            
 class cell_4(Map):
     colour = "orange"
     stage = "right"
@@ -343,4 +306,4 @@ class cell_6(Map):
         Map()
     
         
-#Map()
+Map()

@@ -2,7 +2,6 @@ import pygame
 from fight import battle
 import stats
 from healthbar import *
-from audio import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -36,11 +35,6 @@ end = pygame.image.load("images/death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
-#needed audios
-current_music = None
-fire_audio = pygame.mixer.Sound(sound_collection[4])
-cave = music_collection[1]
-encounter = pygame.mixer.Sound(sound_collection[1])
     
 #fade in and out when changing cells
 def cell_change_anim(x_pos, y_pos, c1, c2):
@@ -85,8 +79,6 @@ class Map:
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
-    music = cave
-    sound = fire_audio
     
     bg = pygame.transform.scale(cave1, (1200, 800))
     stage = "main"
@@ -138,7 +130,6 @@ class Map:
             
             #sets fps
             clock.tick(60)
-            
             #gets key presses
             keys = pygame.key.get_pressed()
 
@@ -170,38 +161,42 @@ class Map:
                     player.x -= speed
             
 
-            
-
             #displays sprites for each individual cell,
             #and when player hits a border, changes the cell
             if cell == "main":
                 cell_1.blits(cell_1) #displays sprites
+                print(Map.obstacle_3.y - player.y)
+                if Map.obstacle_3.x - player.x < 90 and Map.obstacle_3.x - player.x > -54 and keys[pygame.K_e]:
+                    #if Map.obstacle_3.y - player.y > -14 and Map.obstacle_3.y - player.y:
+                    print("A")
+                    win.blit(end, (0, 0))
+                    #for interacting with campfire
+                    
                 if player.top <= 0:
                     #calls the fade animation
-                    cell_change_anim(player_x, (window_height - 101), cell_1, cell_2)
+                    cell_change_anim(550, (window_height - 101), cell_1, cell_2)
                     #calls cell_2 function
                     cell_2()
-                '''elif player.bottom >= window_height:
-                    cell_change_anim(player_x, 1, cell_1, cell_3)
-                    cell_3()'''
+  
                 
                     
             #when player is in cell_2 (go up from main cell), displays sprites from cell_2
             elif cell == "up":
                 cell_2.blits(cell_2)
                 if player.bottom >= window_height:
-                    cell_change_anim(player_x, 1, cell_2, cell_1)
+                    cell_change_anim(550, 1, cell_2, cell_1)
                     cell_1()
                 elif player.top <= 0:
-                    cell_change_anim(player_x, (window_height - 101), cell_2, cell_3)
+                    cell_change_anim(550, (window_height - 101), cell_2, cell_3)
                     cell_3()
 
-            #cell_3 stuff (down from main)
+            #cell_3 stuff (up twice from main)
             elif cell == "up2":
                 cell_3.blits(cell_3)
                 if player.bottom >= window_height:
-                    cell_change_anim(player_x, 1, cell_3, cell_2)
+                    cell_change_anim(550, 1, cell_3, cell_2)
                     cell_2()
+
                     
             #cell_6 stuff (left from main)
             elif cell == "left":
@@ -235,17 +230,12 @@ class cell_1(Map):
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
-    music = cave
-    sound = fire_audio
     bg = pygame.transform.scale(cave1, (window_width, window_height))
     stage = "main"
     rects = [rect1, rect2, rect3, rect4, rect5, rect6, obstacle_3]
     imgs = [img_1, img_2, img_3]
     def __init__(self):
-        
-        #fire_audio.play(-1)
-        Map.music = self.music 
-        Map.sound = self.sound
+        #replaces variables in Map class with ones from this class
         Map.stage = self.stage
         Map.obstacles = self.rects
         Map.imgs = self.imgs
@@ -255,10 +245,6 @@ class cell_1(Map):
         #blits all the sprites for this room on the screen
         #the line under this is the background and the campfire
         win.blits(((self.bg, (0,0)), (self.imgs[2], self.rects[6])))
-        
-        #or place in game function place before while loop or after while loop
-        music(game_music)
-        sound(game_sound)
 
         #blits a different version of the caveman depending on which way you're facing
         if Map.facing == "up":
@@ -284,8 +270,8 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
-        Map.combat_placeholder()
-        Map.bg = self.colour
+        #Map.combat_placeholder()
+        #Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
         Map.imgs = self.imgs
@@ -308,8 +294,8 @@ class cell_2(Map):
             win.blit(front, player)
 
 class cell_3(Map):
-    rect1 = pygame.Rect(0, 0, 430, 800)
-    rect2 = pygame.Rect(680, 0, 510, 800)
+    rect1 = pygame.Rect(0, 0, 440, 800)
+    rect2 = pygame.Rect(750, 0, 450, 800)
     colour = pygame.transform.scale(cave3, (window_width, window_height))
     stage = "up2"
     rects = [rect1, rect2]
@@ -322,7 +308,7 @@ class cell_3(Map):
         
     def blits(self):
         win.blit(self.colour, (0, 0))
-        pygame.draw.rect(win, 'white', self.rect1)
+
         if Map.facing == "up":
             win.blit(back, player)
         elif Map.facing == "right":

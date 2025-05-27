@@ -34,7 +34,8 @@ image2 = pygame.transform.scale(image1, (150, 60))
 image1 = pygame.transform.scale(image1, (150, 60))
 
 #Default combat message in case of error
-combat_message = "Error"
+combat_message = font.render("Error", True, "red")
+strength = font.render(f"Your strength: {playerStr}", True, "red")
 
 
 button = image1.get_rect()
@@ -43,14 +44,14 @@ button.center = (900, 700)
 button2.center = (1100, 700)
 
 def blits():
-    combat.blits(((molerat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5))))
+    combat.blits(((molerat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (strength, (900, 750))))
 
 
 #Function for the battle. Takes 5 parameters (1 string 4 ints) and will take the player stats from Stats.py once that works.
 def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemySpeed):
 
     #combat_message displayed once at beginning of battle
-    combat_message = f"A {enemyType} attacks you! \nStrength: {enemyStr} \nHP: {enemyHP}\n \nYour strength: {playerStr}"
+    combat_message = f"A {enemyType} attacks you! |Strength - {enemyStr} |HP - {enemyHP}"
 
     #this loop keeps going until the end of the battle
     fighting = True
@@ -67,13 +68,16 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     if playerSpeed >= enemySpeed:
                         enemyHP -= playerStr
                         if enemyHP <= 0:
+                            combat_message = f"You defeated the {enemyType}!"
+                            blit_text(combat, combat_message, (100, 100), font, "red")
+                            pygame.time.wait(1000)
                             fighting = False
                         playerHP -= enemyStr
                         if playerHP <= 0:
                             print("died")
                             stats.playerHP = playerHP
                             return "player loss"
-                        combat_message = f'You attacked the {enemyType}, dealing {playerStr} damage! \nThe {enemyType} attacks you, dealing {enemyStr} damage. \nEnemy HP: {enemyHP}'
+                        combat_message = f'You attacked the {enemyType}, dealing {playerStr} damage! |The {enemyType} attacks you, dealing {enemyStr} damage. |Enemy HP: {enemyHP}'
                     #same code except if the enemy is faster
                     else:
                         playerHP -= enemyStr
@@ -81,8 +85,11 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                             return "player loss"
                         enemyHP -= playerStr
                         if enemyHP <= 0:
+                            combat_message = f"You defeated the {enemyType}!"
+                            blit_text(combat, combat_message, (100, 100), font, "red")
+                            pygame.time.wait(1000)
                             fighting = False
-                        combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. \nYou attacked the {enemyType}, dealing {playerStr} damage! \nEnemy HP: {enemyHP}'
+                        combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. |You attacked the {enemyType}, dealing {playerStr} damage! |Enemy HP: {enemyHP}'
                 elif button2.collidepoint(event.pos):
                     sound(buttonaudio)
                     pygame.time.wait(400)
@@ -98,7 +105,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                         if playerHP <= 0:
                             return "player loss"
                         #new combat_message describing failed escape. Sucess does not need a combat_message as loop is exited.
-                        combat_message = f"You could not get away. The {enemyType} attacked you.\nEnemy HP: {enemyHP}"
+                        combat_message = f"You could not get away. The {enemyType} attacked you. |Enemy HP: {enemyHP}"
 
         clock.tick(60)
         combat.fill((69, 69, 69))
@@ -119,9 +126,8 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             image2.set_alpha(255)
             flee_text.set_alpha(255)
         
-        blits()       
-        combat_message = font.render(combat_message, True, "red")
-        combat.blit(combat_message, (800, 600))
+        blits()    
+        blit_text(combat, combat_message, (100, 100), font, "red")
         health_bar.draw(combat)
         combat.blit(heart,(950,5))
     

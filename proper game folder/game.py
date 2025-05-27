@@ -85,6 +85,8 @@ class Map:
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
+    music = cave
+    sound = fire_audio
     
     bg = pygame.transform.scale(cave1, (1200, 800))
     stage = "main"
@@ -233,11 +235,17 @@ class cell_1(Map):
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
+    music = cave
+    sound = fire_audio
     bg = pygame.transform.scale(cave1, (window_width, window_height))
     stage = "main"
     rects = [rect1, rect2, rect3, rect4, rect5, rect6, obstacle_3]
     imgs = [img_1, img_2, img_3]
     def __init__(self):
+        
+        #fire_audio.play(-1)
+        Map.music = self.music 
+        Map.sound = self.sound
         Map.stage = self.stage
         Map.obstacles = self.rects
         Map.imgs = self.imgs

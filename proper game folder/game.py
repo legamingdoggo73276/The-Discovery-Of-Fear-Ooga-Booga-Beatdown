@@ -23,6 +23,7 @@ clock = pygame.time.Clock()
 
 #loading images and creating player
 cave1 = pygame.image.load("cave1.png").convert_alpha()
+mole = pygame.image.load("mole.png").convert_alpha()
 cave2 = pygame.image.load("cave2.png").convert_alpha()
 arrow = pygame.image.load("caveman.png").convert_alpha()
 back = pygame.image.load("back.png").convert_alpha()
@@ -35,11 +36,9 @@ player = arrow.get_rect(center=((window_width/2), (window_height/2)))
 
 #needed audios
 current_music = None
-fire = pygame.mixer.music.load(music_collection[2])
-cave = pygame.mixer.music.load(music_collection[1])
+fire_audio = pygame.mixer.Sound(sound_collection[4])
+cave = music_collection[1]
 encounter = pygame.mixer.Sound(sound_collection[1])
-#testing..
-
     
 #fade in and out when changing cells
 def cell_change_anim(x_pos, y_pos, c1, c2):
@@ -77,6 +76,7 @@ class Map:
     img_1 = pygame.transform.scale(rock, (200, 100))
     img_2 = pygame.transform.scale(rock, (500, 100))
     img_3 = pygame.transform.scale(fire, (100, 100))
+    moleimg = pygame.transform.scale(mole, (50, 50))
     obstacle_1 = img_1.get_rect(center=(300, 300))
     obstacle_2 = img_2.get_rect(center=(700, 700))
     obstacle_3 = img_3.get_rect(center=(1000, 400))
@@ -236,9 +236,13 @@ class cell_1(Map):
 
     imgs = [img_1, img_2, img_3]
     def __init__(self):
-        #add music
+        #Stop previous sounds if necessary (should work in theory..)
+        pygame.mixer.stop()
+        #set music BEFORE starting game
         music(cave)
-        music(fire)
+        sound(fire_audio)
+        fire_audio.play(-1)
+
         #Map.colour = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects

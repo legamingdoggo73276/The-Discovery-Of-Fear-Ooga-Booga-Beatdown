@@ -17,14 +17,13 @@ font = pygame.font.Font('who-asks-satan.ttf', 40)
 combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
 image1 = pygame.image.load("button.png").convert_alpha()
-#buttonaudio = pygame.mixer.Sound(sound_collection[0])
+buttonaudio = pygame.mixer.Sound(sound_collection[0])
+#combatmusic = music_collection[]    not found yet 
+punch = pygame.mixer.Sound(sound_collection[2])
 
 #The molerat
 molerat = pygame.image.load("molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
-#audio for combat (work in progress)
-#combatmusic = pygame.mixer.music.load
-#punch = pygame.mixer.Sound
 
 #Text 
 attack_text = font.render("Attack", True, "red")
@@ -62,7 +61,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 fighting = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button.collidepoint(event.pos):
-                    #sound(buttonaudio)
+                    sound(buttonaudio)
                     pygame.time.wait(400)
                     #checks to see if player is faster then enemy
                     if playerSpeed >= enemySpeed:
@@ -85,7 +84,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                             fighting = False
                         combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. \nYou attacked the {enemyType}, dealing {playerStr} damage! \nEnemy HP: {enemyHP}'
                 elif button2.collidepoint(event.pos):
-                    #sound(buttonaudio)
+                    sound(buttonaudio)
                     pygame.time.wait(400)
                     run = random.randint(0, 2)
                     #if sucessful, ends battle

@@ -26,7 +26,7 @@ image1 = pygame.transform.scale(image1, (80, 60))
 start = pygame.transform.scale(start, (1200, 800))
 
 buttonaudio = pygame.mixer.Sound(sound_collection[0])
-menumusic = pygame.mixer.music.load(music_collection[0])
+menumusic = music_collection[0]
 #call menu music before main loop
 music(menumusic)
 

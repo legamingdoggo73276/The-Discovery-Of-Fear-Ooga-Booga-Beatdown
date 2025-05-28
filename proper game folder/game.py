@@ -2,7 +2,6 @@ import pygame
 from fight import battle
 import stats
 from healthbar import *
-from audio import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -22,6 +21,7 @@ pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown")
 clock = pygame.time.Clock()
 
 #loading images and creating player
+cave0 = pygame.image.load("images/cave1.png").convert_alpha()
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
@@ -34,7 +34,6 @@ fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
-encounter = pygame.mixer.Sound(sound_collection[1])
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
     
@@ -66,27 +65,20 @@ def cell_change_anim(x_pos, y_pos, c1, c2):
 
 
 class Map:
-    #these variables get changed when cells are entered
     #they start as the same ones that are in cell_1
-    rect1 = pygame.Rect(620, 625, 580, 175)
-    rect2 = pygame.Rect(1095, 0, 105, 800)
-    rect3 = pygame.Rect(700, 0, 555, 200)
-    rect4 = pygame.Rect(0, 0, 510, 180)
-    rect5 = pygame.Rect(0, 0, 135, 800)
-    rect6 = pygame.Rect(0, 625, 500, 175)
-    img_1 = pygame.transform.scale(rock, (200, 100))
-    img_2 = pygame.transform.scale(rock, (500, 100))
-    img_3 = pygame.transform.scale(fire, (100, 100))
+    rect1 = pygame.Rect(0, 710, 1200, 90)
+    rect2 = pygame.Rect(925, 0, 275, 800)
+    rect3 = pygame.Rect(675, 0, 525, 300)
+    rect4 = pygame.Rect(0, 0, 510, 275)
+    rect5 = pygame.Rect(0, 0, 250, 800)
     moleimg = pygame.transform.scale(mole, (50, 50))
-    obstacle_1 = img_1.get_rect(center=(300, 300))
-    obstacle_2 = img_2.get_rect(center=(700, 700))
-    obstacle_3 = img_3.get_rect(center=(1000, 400))
     
-    bg = pygame.transform.scale(cave1, (1200, 800))
-    stage = "main"
+    #these variables get changed when cells are entered
+    bg = pygame.transform.scale(cave0, (1200, 800))
+    stage = "start"
     running = True
-    obstacles = [rect1, rect2, rect3, rect4, rect5, rect6, obstacle_3]
-    imgs = [img_1, img_2, img_3]
+    obstacles = [rect1, rect2, rect3, rect4, rect5]
+    imgs = []
     combat_1 = False
     facing = "down"
                 
@@ -102,7 +94,6 @@ class Map:
             pygame.display.update()
             pygame.time.wait(2000)
             #makes the mole grow and start combat
-            sound(encounter)
             for size in range(50, 2000, 50):
                 win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
                 Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                
@@ -166,20 +157,31 @@ class Map:
 
             #displays sprites for each individual cell,
             #and when player hits a border, changes the cell
-            if cell == "main":
+            if cell == "start":
+                starting_cell.blits(starting_cell)
+                if player.top <= 0:
+                    #calls the fade animation
+                    cell_change_anim(550, (window_height - 101), starting_cell, cell_1)
+                    #calls cell_1 function
+                    cell_1()
+                    
+            elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
-                print(Map.obstacle_3.y - player.y)
-                if Map.obstacle_3.x - player.x < 90 and Map.obstacle_3.x - player.x > -54 and keys[pygame.K_e]:
-                    #if Map.obstacle_3.y - player.y > -14 and Map.obstacle_3.y - player.y:
-                    print("A")
-                    win.blit(end, (0, 0))
-                    #for interacting with campfire
+                print(cell_1.obstacle_3.left - player.right)
+                if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
+                    if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
+                        print("A")
+                        win.blit(end, (0, 0))
+                        #for interacting with campfire
                     
                 if player.top <= 0:
                     #calls the fade animation
                     cell_change_anim(550, (window_height - 101), cell_1, cell_2)
                     #calls cell_2 function
                     cell_2()
+                elif player.bottom >= window_height:
+                    cell_change_anim(550, 1, cell_1, starting_cell)
+                    starting_cell()
   
                 
                     
@@ -218,10 +220,36 @@ class Map:
 
         pygame.quit()
 
+class starting_cell(Map):
+    rect1 = pygame.Rect(0, 710, 1200, 90)
+    rect2 = pygame.Rect(925, 0, 275, 800)
+    rect3 = pygame.Rect(675, 0, 525, 300)
+    rect4 = pygame.Rect(0, 0, 510, 275)
+    rect5 = pygame.Rect(0, 0, 250, 800)
+    stage = "start"
+    bg = pygame.transform.scale(cave0, (window_width, window_height))
+    rects = [rect1, rect2, rect3, rect4, rect5]
+    imgs = []
+    def __init__(self):
+        Map.stage = self.stage
+        Map.obstacles = self.rects
+        Map.imgs = self.imgs
+        Map()
+    def blits(self):
+        win.blit(self.bg, (0, 0))
+
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
 
 class cell_1(Map):
     #cell_1 variables
-    rect1 = pygame.Rect(620, 625, 580, 175)
+    rect1 = pygame.Rect(630, 625, 570, 175)
     rect2 = pygame.Rect(1095, 0, 105, 800)
     rect3 = pygame.Rect(700, 0, 555, 200)
     rect4 = pygame.Rect(0, 0, 510, 180)
@@ -273,7 +301,7 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
-        Map.combat_placeholder()
+        #Map.combat_placeholder()
         #Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects

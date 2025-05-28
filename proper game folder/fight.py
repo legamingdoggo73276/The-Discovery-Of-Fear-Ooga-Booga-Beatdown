@@ -13,10 +13,11 @@ clock = pygame.time.Clock()
 
 #Config of images sounds and font
 #TODO Put any new sounds here.
-font = pygame.font.Font('who-asks-satan.ttf', 40)
+font = pygame.font.Font('PanicStricken.ttf', 40)
 combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
 image1 = pygame.image.load("button.png").convert_alpha()
+textboximage = pygame.image.load("TextBox.png").convert_alpha()
 buttonaudio = pygame.mixer.Sound(sound_collection[0])
 #combatmusic = music_collection[]    not found yet 
 punch = pygame.mixer.Sound(sound_collection[2])
@@ -35,22 +36,33 @@ victory_text = font.render("You won!", True, "green")
 #The buttons
 image2 = pygame.transform.scale(image1, (150, 60))
 image1 = pygame.transform.scale(image1, (150, 60))
+textboximage2 = pygame.transform.scale(textboximage, (480, 80))
+textboximage = pygame.transform.scale(textboximage, (340, 50))
 
 #Default combat message in case of error
 combat_message = font.render("Error", True, "red")
 strength = font.render(f"Your strength: {playerStr}", True, "red")
+run = font.render(f"You sucesfully fled battle.", True, "yellow")
 
 
 button = image1.get_rect()
 button2 = image2.get_rect()
+textbox = textboximage.get_rect()
+
 button.center = (900, 700)
 button2.center = (1100, 700)
+textbox.center = (550, 450)
 
 def blits():
-    combat.blits(((molerat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (strength, (900, 750))))
+    combat.blits(((molerat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (textboximage, (830,750)), (strength, (850, 750))))
 
 def victory_blits():
     combat.blits(((dead_molerat, (0,0)), (victory_text, (600,400))))
+    pygame.display.update()
+    pygame.time.wait(2000)
+
+def flee_blits():
+    combat.blits(((molerat, (0, 0)), (textboximage2, (480, 290)), (run, (500,300))))
     pygame.display.update()
     pygame.time.wait(2000)
 
@@ -59,7 +71,7 @@ def victory_blits():
 def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemySpeed):
 
     #combat_message displayed once at beginning of battle
-    combat_message = f"A {enemyType} attacks you! |Strength - {enemyStr} |HP - {enemyHP}"
+    combat_message = f"A {enemyType} attacks you! |Strength: {enemyStr} HP: {enemyHP}"
 
     #this loop keeps going until the end of the battle
     fighting = True
@@ -100,7 +112,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     run = random.randint(0, 2)
                     #if sucessful, ends battle
                     if run <= 1:
-                        print("You ran away!")
+                        flee_blits()
                         stats.playerHP = playerHP
                         return "You ran away!"
                     #if unsucessful, enemy attacks as normal and your turn is skipped.

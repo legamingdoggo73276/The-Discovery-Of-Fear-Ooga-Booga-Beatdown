@@ -270,7 +270,7 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
-        #Map.combat_placeholder()
+        Map.combat_placeholder()
         #Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects

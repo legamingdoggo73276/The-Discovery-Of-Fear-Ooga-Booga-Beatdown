@@ -84,10 +84,11 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button.collidepoint(event.pos):
                     sound(buttonaudio)
-                    pygame.time.wait(400)
+                    pygame.time.wait(150)
                     #checks to see if player is faster then enemy
                     if playerSpeed >= enemySpeed:
                         enemyHP -= playerStr
+                        sound(punch)
                         if enemyHP <= 0:
                             fighting = False
                         playerHP -= enemyStr

@@ -2,6 +2,7 @@ import pygame
 from fight import battle
 import stats
 from healthbar import *
+from audio import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -33,6 +34,7 @@ fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
 end = pygame.transform.scale(end, (1200, 800))
+encounter = pygame.mixer.Sound(sound_collection[1])
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
     
@@ -100,6 +102,7 @@ class Map:
             pygame.display.update()
             pygame.time.wait(2000)
             #makes the mole grow and start combat
+            sound(encounter)
             for size in range(50, 2000, 50):
                 win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
                 Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                

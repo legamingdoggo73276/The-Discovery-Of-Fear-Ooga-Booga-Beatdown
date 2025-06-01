@@ -2,6 +2,7 @@ import pygame
 from fight import battle
 import stats
 from healthbar import *
+from audio import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -21,7 +22,7 @@ pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown")
 clock = pygame.time.Clock()
 
 #loading images and creating player
-cave0 = pygame.image.load("images/cave1.png").convert_alpha()
+cave0 = pygame.image.load("images/startingroom.png").convert_alpha()
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
@@ -33,6 +34,7 @@ left = pygame.image.load("images/left.png").convert_alpha()
 fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
+encounter = pygame.mixer.Sound(sound_collection[1])
 end = pygame.transform.scale(end, (1200, 800))
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
@@ -93,6 +95,7 @@ class Map:
             win.blit(Map.moleimg, (550, 350))
             pygame.display.update()
             pygame.time.wait(2000)
+            sound(encounter)
             #makes the mole grow and start combat
             for size in range(50, 2000, 50):
                 win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
@@ -301,8 +304,8 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
-        #Map.combat_placeholder()
-        #Map.bg = self.colour
+        Map.combat_placeholder()
+        Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
         Map.imgs = self.imgs

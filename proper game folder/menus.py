@@ -20,7 +20,7 @@ def cell_change_anim(col_1, col_2):
     fadeOut.fill("black")
     alpha = 255
     while alpha > 0:
-        cell_1.blits(cell_1)
+        starting_cell.blits(starting_cell)
         fadeOut.set_alpha(alpha)
         win.blit(fadeOut, (0, 0))
         pygame.display.update()

@@ -16,15 +16,15 @@ clock = pygame.time.Clock()
 font = pygame.font.Font('PanicStricken.ttf', 40)
 combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")
-image1 = pygame.image.load("button.png").convert_alpha()
-textboximage = pygame.image.load("TextBox.png").convert_alpha()
+image1 = pygame.image.load("images/button.png").convert_alpha()
+textboximage = pygame.image.load("images/TextBox.png").convert_alpha()
 buttonaudio = pygame.mixer.Sound(sound_collection[0])
 #combatmusic = music_collection[]    not found yet 
 punch = pygame.mixer.Sound(sound_collection[2])
 
 #The molerat
-molerat = pygame.image.load("molerat.png").convert_alpha()
-dead_molerat = pygame.image.load("dead_molerat.png").convert_alpha()
+molerat = pygame.image.load("images/molerat.png").convert_alpha()
+dead_molerat = pygame.image.load("images/dead_molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
 dead_molerat = pygame.transform.scale(dead_molerat, (1200,800))
 

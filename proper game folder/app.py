@@ -3,7 +3,7 @@ from game import *
 from fight import battle
 import stats
 from healthbar import *
-from menus import *
+#from menus import *
 from audio import *
 pygame.font.init()
 pygame.init()
@@ -38,6 +38,27 @@ button2.center = (200, 500)
 def blits():
     win.blits(((start, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
 
+def starting_fade():
+    fadeIn = pygame.Surface((window_width, window_height)).convert_alpha()
+    fadeIn.set_alpha(0)
+    fadeIn.fill("black")
+    for i in range(0, 260, 5):
+        win.blit(fadeIn, (0, 0))
+        fadeIn.set_alpha(i)
+        pygame.display.update()
+        pygame.time.wait(40)
+
+    fadeOut = pygame.Surface((window_width, window_height)).convert_alpha()
+    fadeOut.fill("black")
+    alpha = 255
+    while alpha > 0:
+        starting_cell.blits(starting_cell)
+        fadeOut.set_alpha(alpha)
+        win.blit(fadeOut, (0, 0))
+        pygame.display.update()
+        pygame.time.wait(30)
+        alpha -= 5
+
 
 running = True
 while running:
@@ -53,9 +74,8 @@ while running:
                 elif button2.collidepoint(events.pos):
                     sound(buttonaudio)
                     pygame.mixer.music.fadeout(1000)
-                    cell_change_anim("pink", "grey")
+                    starting_fade()
                     Map()
-                    bg = ("grey")
             
             clock.tick(60)
 

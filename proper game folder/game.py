@@ -27,6 +27,10 @@ cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
 cave3 = pygame.image.load("images/cave3.png").convert_alpha()
+cave4 = pygame.image.load("images/slimeroom.png").convert_alpha()
+caveend = pygame.image.load("images/CaveExit.png").convert_alpha()
+alienroom = pygame.image.load("images/alien.png").convert_alpha()
+treasureroom = pygame.image.load("images/treasure.png").convert_alpha()
 front = pygame.image.load("images/caveman.png").convert_alpha()
 back = pygame.image.load("images/back.png").convert_alpha()
 right = pygame.image.load('images/right.png').convert_alpha()
@@ -164,17 +168,15 @@ class Map:
                 starting_cell.blits(starting_cell)
                 if player.top <= 0:
                     #calls the fade animation
-                    cell_change_anim(550, (window_height - 101), starting_cell, cell_1)
+                    cell_change_anim(550, (window_height - 101), starting_cell, cell_5)
                     #calls cell_1 function
-                    cell_1()
+                    cell_5()
                     
             elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
-                print(cell_1.obstacle_3.left - player.right)
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
                     if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
-                        print("A")
-                        win.blit(end, (0, 0))
+                        playerHP = maxPHP
                         #for interacting with campfire
                     
                 if player.top <= 0:
@@ -185,7 +187,7 @@ class Map:
                 elif player.bottom >= window_height:
                     cell_change_anim(550, 1, cell_1, starting_cell)
                     starting_cell()
-  
+                    
                 
                     
             #when player is in cell_2 (go up from main cell), displays sprites from cell_2
@@ -206,11 +208,11 @@ class Map:
                     cell_2()
 
                     
-            #cell_6 stuff (left from main)
-            elif cell == "left":
-                if player.right >= window_width:
-                    cell_change_anim(1, player_y, cell_6, cell_1)
-                    cell_1()
+            elif cell == "slime":
+                cell_4.blits(cell_4)
+                if player.bottom >= window_height:
+                    cell_change_anim(1, player_y, cell_4, cell_1)
+                    cell_4()
 
             #cell_4 stuff (right from main)
             elif cell == "right":
@@ -353,19 +355,64 @@ class cell_3(Map):
             win.blit(front, player)
             
 class cell_4(Map):
-    colour = "orange"
-    stage = "right"
+    rect1 = pygame.Rect(1150, 0, 50, 400)
+    rect2 = pygame.Rect(680, 400, 520, 400)
+    rect3 = pygame.Rect(0, 0, 950, 200)
+    rect4 = pygame.Rect(0, 400, 470, 400)
+    colour = pygame.transform.scale(cave4, (window_width, window_height))
+    stage = "slime"
+    rects = [rect1, rect2, rect3, rect4]
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
+        Map.obstacles = self.rects
         Map()
+    def blits(self):
+        win.blit(self.colour, (0, 0))
+        
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
+            
 class cell_5(Map):
-    colour = "orange"
-    stage = "up-right"
+    rect1 = pygame.Rect(1115, 0, 85, 250)
+    rect2 = pygame.Rect(1115, 400, 85, 400)
+    rect3 = pygame.Rect(0, 0, 1200, 100)
+    rect4 = pygame.Rect(0, 400, 470, 400)
+    rect5 = pygame.Rect(725, 600, 475, 200)
+    colour = pygame.transform.scale(alienroom, (window_width, window_height))
+    stage = "alien"
+    rects = []
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
+        Map.obstacles = self.rects
         Map()
+    def blits(self):
+        win.blit(self.colour, (0, 0))
+        #pygame.draw.rect(win, 'white', self.rect1)
+        #pygame.draw.rect(win, 'white', self.rect2)
+        pygame.draw.rect(win, 'white', self.rect3)
+        pygame.draw.rect(win, 'white', self.rect4)
+        #pygame.draw.rect(win, 'white', self.rect5)
+
+
+
+        
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
+            
 class cell_6(Map):
     colour = "purple"
     stage = "left"

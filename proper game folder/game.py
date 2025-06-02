@@ -249,6 +249,30 @@ class Map:
                     cell_change_anim(1, player_y, cell_7, cell_4)
                     cell_4()
 
+            elif cell == "alien":
+                cell_5.blits(cell_5)
+                if player.bottom >= window_height:
+                    cell_change_anim(550, 1, cell_5, cell_3)
+                    cell_3()
+                elif player.right >= window_width:
+                    cell_change_anim(1, player_y, cell_5, cell_6)
+                    cell_6()
+            
+            elif cell == "curve":
+                cell_6.blits(cell_6)
+                if player.left <= 0:
+                    cell_change_anim((window_width - 101), player_y, cell_6, cell_5)
+                    cell_5()
+                elif player.top <= 0:
+                    cell_change_anim(550, (window_height - 101), cell_6, cell_8)
+                    cell_8()
+                
+            elif cell == "exit":
+                cell_8.blits(cell_8)
+                if player.bottom >= window_height:
+                    cell_change_anim(1000, 1, cell_8, cell_6)
+                    cell_6()
+
             elif cell == "right":
                 if player.left <= 0:
                     cell_change_anim((window_width - 101), player_y, cell_4, cell_1)

@@ -1,6 +1,5 @@
 import pygame
 pygame.init()
-from pygame import mixer
 pygame.mixer.init()
 
 def music(audio):

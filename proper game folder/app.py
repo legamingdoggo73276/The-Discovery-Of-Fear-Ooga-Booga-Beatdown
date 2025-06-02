@@ -8,7 +8,6 @@ from audio import *
 pygame.font.init()
 pygame.init()
 
-
 clock = pygame.time.Clock()
 
 #window size and heading: DO NOT MODIFY 

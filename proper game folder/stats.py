@@ -1,6 +1,5 @@
 import pygame
 
-
 #Starting stats
 basePlayerHP = 100
 baseStr = 10

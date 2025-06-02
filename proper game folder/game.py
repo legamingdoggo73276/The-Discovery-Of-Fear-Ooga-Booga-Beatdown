@@ -25,6 +25,7 @@ clock = pygame.time.Clock()
 cave0 = pygame.image.load("images/startingroom.png").convert_alpha()
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
+slime = pygame.image.load("images/SlimeFight.png")
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
 cave3 = pygame.image.load("images/cave3.png").convert_alpha()
 cave4 = pygame.image.load("images/slimeroom.png").convert_alpha()
@@ -79,6 +80,7 @@ class Map:
     rect4 = pygame.Rect(0, 0, 510, 275)
     rect5 = pygame.Rect(0, 0, 250, 800)
     moleimg = pygame.transform.scale(mole, (50, 50))
+    SlimeFight = pygame.transform.scale(slime, (1200,800))
     
     #these variables get changed when cells are entered
     bg = pygame.transform.scale(cave0, (1200, 800))
@@ -87,6 +89,7 @@ class Map:
     obstacles = [rect1, rect2, rect3, rect4, rect5]
     imgs = []
     combat_1 = False
+    combat_2 = False
     facing = "down"
                 
     def __init__(self):
@@ -94,7 +97,7 @@ class Map:
         if self.running == True:
             Map.game(Map.bg, Map.stage, Map.running)
             
-    def combat_placeholder():
+    def mole_combat():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
             win.blit(Map.moleimg, (550, 350))
@@ -117,6 +120,21 @@ class Map:
                 pygame.quit()
 
             Map.combat_1 = True
+    def slime_combat():
+    #can call combat function here, makes it not repeat upon re-entering room
+        if Map.combat_2 == False:
+            win.blit(Map.SlimeFight, (0, 0))
+            pygame.display.update()
+            sound(encounter)
+            result = battle("Slime", 10, 50, playerStr, playerHP, playerSpeed, 10)
+            print(stats.playerHP)
+            while stats.playerHP <= 0:
+                win.blit(end, (0, 0))
+                pygame.display.update()
+                pygame.time.wait(5000)
+                pygame.quit()
+
+            Map.combat_2 = True
             
     def game(bg, cell, run):
         #called by init to start game
@@ -169,15 +187,15 @@ class Map:
                 starting_cell.blits(starting_cell)
                 if player.top <= 0:
                     #calls the fade animation
-                    cell_change_anim(550, (window_height - 101), starting_cell, cell_7)
+                    cell_change_anim(550, (window_height - 101), starting_cell, cell_1)
                     #calls cell_1 function
-                    cell_7()
+                    cell_1()
                     
             elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
                     if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
-                        playerHP = maxPHP
+                        Heal(1000)
                         #for interacting with campfire
                     
                 if player.top <= 0:
@@ -198,23 +216,25 @@ class Map:
                     cell_change_anim(550, 1, cell_2, cell_1)
                     cell_1()
                 elif player.top <= 0:
-                    cell_change_anim(550, (window_height - 101), cell_2, cell_3)
-                    cell_3()
+                    cell_change_anim(550, (window_height - 101), cell_2, cell_4)
+                    cell_4()
 
             #cell_3 stuff (up twice from main)
             elif cell == "up2":
                 cell_3.blits(cell_3)
                 if player.bottom >= window_height:
-                    cell_change_anim(550, 1, cell_3, cell_2)
-                    cell_2()
+                    cell_change_anim(550, 1, cell_3, cell_4)
+                    cell_4()
 
                     
             elif cell == "slime":
                 cell_4.blits(cell_4)
-                if player.bottom >= window_height:
-                    cell_change_anim(1, player_y, cell_4, cell_1)
-                    cell_4()
-
+                if player.top <= 0:
+                    cell_change_anim(1, player_y, cell_4, cell_3)
+                    cell_3()
+                elif player.bottom >= window_height:
+                    cell_change_anim(550, 1, cell_4, cell_2)
+                    cell_2()
             #cell_4 stuff (right from main)
             elif cell == "right":
                 if player.left <= 0:
@@ -307,7 +327,7 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
-        Map.combat_placeholder()
+        Map.mole_combat()
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -338,6 +358,7 @@ class cell_3(Map):
     rects = [rect1, rect2]
 
     def __init__(self):
+        Map.slime_combat()
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -345,6 +366,9 @@ class cell_3(Map):
         
     def blits(self):
         win.blit(self.colour, (0, 0))
+
+        if Map.combat_2 == False:
+            win.blit(Map.SlimeFight, (0, 0))
 
         if Map.facing == "up":
             win.blit(back, player)

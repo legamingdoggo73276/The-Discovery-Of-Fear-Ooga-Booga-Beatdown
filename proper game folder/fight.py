@@ -27,6 +27,8 @@ molerat = pygame.image.load("images/molerat.png").convert_alpha()
 dead_molerat = pygame.image.load("images/dead_molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
 dead_molerat = pygame.transform.scale(dead_molerat, (1200,800))
+slime = pygame.image.load("images/slimeattack.png").convert_alpha()
+slime = pygame.transform.scale(slime, (1200, 800))
 
 #Text 
 attack_text = font.render("Attack", True, "red")
@@ -53,8 +55,11 @@ button.center = (900, 700)
 button2.center = (1100, 700)
 textbox.center = (550, 450)
 
-def blits():
+def moleratblits():
     combat.blits(((molerat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (textboximage, (830,750)), (strength, (850, 750))))
+
+def slimeblits():
+    combat.blits(((slime, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (textboximage, (830,750)), (strength, (850, 750))))
 
 def victory_blits():
     combat.blits(((dead_molerat, (0,0)), (victory_text, (600,400))))
@@ -62,7 +67,7 @@ def victory_blits():
     pygame.time.wait(2000)
 
 def flee_blits():
-    combat.blits(((molerat, (0, 0)), (textboximage2, (480, 290)), (run, (500,300))))
+    combat.blits(((textboximage2, (480, 290)), (run, (500,300))))
     pygame.display.update()
     pygame.time.wait(2000)
 
@@ -144,7 +149,10 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
             flee_text.set_alpha(255)
         
         if enemyHP > 0:
-            blits()    
+            if enemyType == "Mole Rat":
+                moleratblits()
+            elif enemyType == "Slime":
+                slimeblits()
             blit_text(combat, combat_message, (100, 100), font, "red")
             health_bar.draw(combat)
             combat.blit(heart,(950,5))

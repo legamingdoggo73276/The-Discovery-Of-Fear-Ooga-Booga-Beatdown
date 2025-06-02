@@ -223,19 +223,32 @@ class Map:
             elif cell == "up2":
                 cell_3.blits(cell_3)
                 if player.bottom >= window_height:
-                    cell_change_anim(550, 1, cell_3, cell_4)
+                    cell_change_anim(1000, 1, cell_3, cell_4)
                     cell_4()
+                if player.top <= 0:
+                    cell_change_anim(550, (window_height - 101), cell_3, cell_5)
+                    cell_5()
 
                     
             elif cell == "slime":
                 cell_4.blits(cell_4)
                 if player.top <= 0:
-                    cell_change_anim(1, player_y, cell_4, cell_3)
+                    cell_change_anim(550, (window_height - 101), cell_4, cell_3)
                     cell_3()
                 elif player.bottom >= window_height:
                     cell_change_anim(550, 1, cell_4, cell_2)
                     cell_2()
+                elif player.left <= 0:
+                    cell_change_anim((window_width - 101), player_y, cell_4, cell_7)
+                    cell_7()
             #cell_4 stuff (right from main)
+
+            elif cell == "treasure":
+                cell_7.blits(cell_7)
+                if player.right >= window_width:
+                    cell_change_anim(1, player_y, cell_7, cell_4)
+                    cell_4()
+
             elif cell == "right":
                 if player.left <= 0:
                     cell_change_anim((window_width - 101), player_y, cell_4, cell_1)

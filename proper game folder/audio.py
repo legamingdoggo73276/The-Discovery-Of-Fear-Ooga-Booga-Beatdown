@@ -13,7 +13,7 @@ def sound(audio):
     pygame.mixer.Sound.play(audio)
 
 #can keep them as individual variables or just a list and call from list !!
-music_collection = ["menu.mp3", "cave.mp3"]
-sound_collection = ["button.mp3", "encounter.mp3", "punch.mp3", "obtain_item.mp3", "fire.mp3"]
+music_collection = ["sounds/menu.mp3", "sounds/cave.mp3"]
+sound_collection = ["sounds/button.mp3", "sounds/encounter.mp3", "sounds/punch.mp3", "sounds/obtain_item.mp3", "sounds/fire.mp3"]
 
 

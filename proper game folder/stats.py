@@ -22,5 +22,6 @@ def gainStrength(gain):
 def Heal(rate):
     if playerHP <= maxPHP:
         playerHP += 10
+        print(playerHP)
         pygame.time.wait(rate)
 

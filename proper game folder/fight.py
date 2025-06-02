@@ -21,7 +21,7 @@ pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat"
 image1 = pygame.image.load("images/button.png").convert_alpha()
 textboximage = pygame.image.load("images/TextBox.png").convert_alpha()
 buttonaudio = pygame.mixer.Sound(sound_collection[0])
-#combatmusic = music_collection[]    not found yet 
+combatmusic = music_collection[2]
 punch = pygame.mixer.Sound(sound_collection[2])
 
 #The molerat

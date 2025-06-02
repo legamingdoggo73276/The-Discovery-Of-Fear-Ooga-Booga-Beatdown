@@ -34,6 +34,7 @@ cave3 = pygame.image.load("images/cave3.png").convert_alpha()
 cave4 = pygame.image.load("images/slimeroom.png").convert_alpha()
 caveend = pygame.image.load("images/CaveExit.png").convert_alpha()
 alienroom = pygame.image.load("images/alien.png").convert_alpha()
+void = pygame.image.load("images/void.png").convert_alpha()
 bend = pygame.image.load("images/bend.png").convert_alpha()
 treasureroom = pygame.image.load("images/treasure.png").convert_alpha()
 front = pygame.image.load("images/caveman.png").convert_alpha()
@@ -570,4 +571,27 @@ class cell_8(Map):
             win.blit(left, player)
         else:
             win.blit(front, player)
+
+class cell_9(Map):
+    colour = pygame.transform.scale(void, (window_width, window_height))
+    stage = "blank"
+    rects = []
+    def __init__(self):
+        Map.bg = self.colour
+        Map.stage = self.stage
+        Map.obstacles = self.rects
+        Map()
+    
+    def blits(self):
+        win.blit(self.colour, (0, 0))
+        
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
+
 #Map()

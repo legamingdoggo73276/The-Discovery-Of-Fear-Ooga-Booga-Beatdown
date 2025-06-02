@@ -30,6 +30,7 @@ cave3 = pygame.image.load("images/cave3.png").convert_alpha()
 cave4 = pygame.image.load("images/slimeroom.png").convert_alpha()
 caveend = pygame.image.load("images/CaveExit.png").convert_alpha()
 alienroom = pygame.image.load("images/alien.png").convert_alpha()
+bend = pygame.image.load("images/bend.png").convert_alpha()
 treasureroom = pygame.image.load("images/treasure.png").convert_alpha()
 front = pygame.image.load("images/caveman.png").convert_alpha()
 back = pygame.image.load("images/back.png").convert_alpha()
@@ -168,9 +169,9 @@ class Map:
                 starting_cell.blits(starting_cell)
                 if player.top <= 0:
                     #calls the fade animation
-                    cell_change_anim(550, (window_height - 101), starting_cell, cell_5)
+                    cell_change_anim(550, (window_height - 101), starting_cell, cell_7)
                     #calls cell_1 function
-                    cell_5()
+                    cell_7()
                     
             elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
@@ -383,11 +384,13 @@ class cell_5(Map):
     rect1 = pygame.Rect(1115, 0, 85, 250)
     rect2 = pygame.Rect(1115, 400, 85, 400)
     rect3 = pygame.Rect(0, 0, 1200, 100)
-    rect4 = pygame.Rect(0, 400, 470, 400)
+    rect4 = pygame.Rect(0, 600, 500, 200)
     rect5 = pygame.Rect(725, 600, 475, 200)
+    rect6 = pygame.Rect(0, 0, 80, 800)
+    ship = pygame.Rect(200, 110, 300, 200)
     colour = pygame.transform.scale(alienroom, (window_width, window_height))
     stage = "alien"
-    rects = []
+    rects = [rect1, rect2, rect3, rect4, rect5, rect6, ship]
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
@@ -395,14 +398,6 @@ class cell_5(Map):
         Map()
     def blits(self):
         win.blit(self.colour, (0, 0))
-        #pygame.draw.rect(win, 'white', self.rect1)
-        #pygame.draw.rect(win, 'white', self.rect2)
-        pygame.draw.rect(win, 'white', self.rect3)
-        pygame.draw.rect(win, 'white', self.rect4)
-        #pygame.draw.rect(win, 'white', self.rect5)
-
-
-
         
         if Map.facing == "up":
             win.blit(back, player)
@@ -414,12 +409,71 @@ class cell_5(Map):
             win.blit(front, player)
             
 class cell_6(Map):
-    colour = "purple"
-    stage = "left"
+    rect1 = pygame.Rect(0, 570, 1200, 230)
+    rect2 = pygame.Rect(0, 0, 800, 360)
+    rect3 = pygame.Rect(1120, 0, 80, 800)
+    rect4 = pygame.Rect(800, 525, 400, 275)
+    colour = pygame.transform.scale(bend, (window_width, window_height))
+    stage = "curve"
+    rects = []
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
+        Map.obstacles = self.rects
+        Map()
+    def blits(self):
+        win.blit(self.colour, (0, 0))
+
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
+            
+class cell_7(Map):
+    colour = pygame.transform.scale(treasureroom, (window_width, window_height))
+    stage = "treasure"
+    rects = []
+    def __init__(self):
+        Map.bg = self.colour
+        Map.stage = self.stage
+        Map.obstacles = self.rects
+        Map()
+        
+    def blits(self):
+        win.blit(self.colour, (0, 0))
+        
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
+
+class cell_8(Map):
+    colour = pygame.transform.scale(caveend, (window_width, window_height))
+    stage = "exit"
+    rects = []
+    def __init__(self):
+        Map.bg = self.colour
+        Map.stage = self.stage
+        Map.obstacles = self.rects
         Map()
     
+    def blits(self):
+        win.blit(self.colour, (0, 0))
         
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
 #Map()

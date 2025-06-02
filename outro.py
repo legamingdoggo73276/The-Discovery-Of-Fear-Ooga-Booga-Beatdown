@@ -1,5 +1,6 @@
 class cell_9(Map):
     #import white screen (image)
+    #rename caveend with new image ofc
     colour = pygame.transform.scale(caveend, (window_width, window_height))
     stage = "blank"
     rects = []

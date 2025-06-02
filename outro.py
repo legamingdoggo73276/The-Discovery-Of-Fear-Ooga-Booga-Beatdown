@@ -2,6 +2,30 @@
 
 import cv2
 
+class cell_9(Map):
+    #input white screen (image)
+    colour = pygame.transform.scale(caveend, (window_width, window_height))
+    stage = "blank"
+    rects = []
+    def __init__(self):
+        Map.bg = self.colour
+        Map.stage = self.stage
+        Map.obstacles = self.rects
+        Map()
+    
+    def blits(self):
+        win.blit(self.colour, (0, 0))
+        
+        if Map.facing == "up":
+            win.blit(back, player)
+        elif Map.facing == "right":
+            win.blit(right, player)
+        elif Map.facing == "left":
+            win.blit(left, player)
+        else:
+            win.blit(front, player)
+
+
 if __name__ == "__main__":
 
     video_path = "[video name].mp4"

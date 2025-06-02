@@ -10,6 +10,8 @@ from game import *
 from audio import * 
 
 clock = pygame.time.Clock()
+window_height = 800
+window_width = 1200
 
 #Config of images sounds and font
 #TODO Put any new sounds here.
@@ -27,8 +29,8 @@ molerat = pygame.image.load("images/molerat.png").convert_alpha()
 dead_molerat = pygame.image.load("images/dead_molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
 dead_molerat = pygame.transform.scale(dead_molerat, (1200,800))
-slime = pygame.image.load("images/slimeattack.png").convert_alpha()
-slime = pygame.transform.scale(slime, (1200, 800))
+slime = pygame.image.load("images/slimecombat.png").convert_alpha()
+slime = pygame.transform.scale(slime, (window_width, window_height))
 
 #Text 
 attack_text = font.render("Attack", True, "red")
@@ -43,7 +45,7 @@ textboximage = pygame.transform.scale(textboximage, (340, 50))
 
 #Default combat message in case of error
 combat_message = font.render("Error", True, "red")
-strength = font.render(f"Your strength: {playerStr}", True, "red")
+strength = font.render(f"Your strength: {Stats.playerStr}", True, "red")
 run = font.render(f"You sucesfully fled battle.", True, "yellow")
 
 
@@ -99,15 +101,15 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                         playerHP -= enemyStr
                         if playerHP <= 0:
                             print("died")
-                            stats.playerHP = playerHP
+                            Stats.playerHP = playerHP
                             return "player loss"
                         combat_message = f'You attacked the {enemyType}, dealing {playerStr} damage! |The {enemyType} attacks you, dealing {enemyStr} damage. |Enemy HP: {enemyHP}'
                     #same code except if the enemy is faster
                     else:
-                        playerHP -= enemyStr
-                        if playerHP <= 0:
+                        Stats.playerHP -= enemyStr
+                        if Stats.playerHP <= 0:
                             return "player loss"
-                        enemyHP -= playerStr
+                        enemyHP -= Stats.playerStr
                         if enemyHP <= 0:
                             fighting = False
                         combat_message = f'The {enemyType} attacks you, dealing {enemyStr} damage. |You attacked the {enemyType}, dealing {playerStr} damage! |Enemy HP: {enemyHP}'
@@ -119,7 +121,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     #if sucessful, ends battle
                     if run <= 1:
                         flee_blits()
-                        stats.playerHP = playerHP
+                        Stats.playerHP = playerHP
                         return "You ran away!"
                     #if unsucessful, enemy attacks as normal and your turn is skipped.
                     else:
@@ -165,6 +167,6 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
         pygame.display.update()
 
     #Default return. If the loop is exited without any return value.
-    stats.playerHP = playerHP
+    Stats.playerHP = playerHP
     return "enemy vanquished"
     

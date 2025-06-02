@@ -78,7 +78,7 @@ while running:
             
             clock.tick(60)
 
-            health_bar.hp = stats.playerHP
+            health_bar.hp = Stats.playerHP
             health_bar.draw(win)
 
             win.blit(heart,(950,5))

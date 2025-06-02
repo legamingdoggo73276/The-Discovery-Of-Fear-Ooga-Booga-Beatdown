@@ -1,26 +1,27 @@
 import pygame
 
 #Starting stats
-basePlayerHP = 100
-baseStr = 10
-playerStr = 10
-maxPHP = 100
-playerHP = 100
-playerSpeed = 10
+class Stats:
+    basePlayerHP = 100
+    baseStr = 10
+    playerStr = 10
+    maxPHP = 100
+    playerHP = 100
+    playerSpeed = 10
 
 def gainHealth(gain):
-    playerHP += gain
-    maxPHP += gain
+    Stats.playerHP += gain
+    Stats.maxPHP += gain
 
 def gainSpeed(gain):
-    playerSpeed += gain
+    Stats.playerSpeed += gain
 
 def gainStrength(gain):
-    playerStr += gain
+    Stats.playerStr += gain
 
 def Heal(rate):
-    if playerHP <= maxPHP:
-        playerHP += 10
-        print(playerHP)
+    if Stats.playerHP < Stats.maxPHP:
+        Stats.playerHP += 10
+        print(Stats.playerHP)
         pygame.time.wait(rate)
 

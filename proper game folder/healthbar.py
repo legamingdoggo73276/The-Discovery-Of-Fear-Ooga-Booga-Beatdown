@@ -22,8 +22,8 @@ class HealthBar():
         self.y = y 
         self. w = w
         self.h = h
-        self.hp = playerHP
-        self.max_hp = maxPHP
+        self.hp = Stats.playerHP
+        self.max_hp = Stats.maxPHP
 
     def draw(self, surface):
         #calculate health ratio

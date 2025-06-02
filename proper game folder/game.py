@@ -25,7 +25,10 @@ clock = pygame.time.Clock()
 cave0 = pygame.image.load("images/startingroom.png").convert_alpha()
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
-slime = pygame.image.load("images/SlimeFight.png")
+slimefight = pygame.image.load("images/slimecombat.png").convert_alpha()
+slime1 = pygame.image.load("images/babyslime.png").convert_alpha()
+slime2 = pygame.image.load("images/slimedown.png").convert_alpha()
+slime3 = pygame.image.load("images/bigslime.png").convert_alpha()
 cave2 = pygame.image.load("images/cave2.png").convert_alpha()
 cave3 = pygame.image.load("images/cave3.png").convert_alpha()
 cave4 = pygame.image.load("images/slimeroom.png").convert_alpha()
@@ -80,7 +83,10 @@ class Map:
     rect4 = pygame.Rect(0, 0, 510, 275)
     rect5 = pygame.Rect(0, 0, 250, 800)
     moleimg = pygame.transform.scale(mole, (50, 50))
-    SlimeFight = pygame.transform.scale(slime, (1200,800))
+    babyslime = pygame.transform.scale(slime1, (100, 100))
+    slimedown = pygame.transform.scale(slime2, (100, 100))
+    bigslime = pygame.transform.scale(slime3, (150, 150))
+    slime = babyslime
     
     #these variables get changed when cells are entered
     bg = pygame.transform.scale(cave0, (1200, 800))
@@ -111,9 +117,9 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(10)
                 
-            result = battle("Mole Rat", 10, 50, playerStr, playerHP, playerSpeed, 10)
-            print(stats.playerHP)
-            while stats.playerHP <= 0:
+            result = battle("Mole Rat", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            print(Stats.playerHP)
+            while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
                 pygame.time.wait(5000)
@@ -123,12 +129,27 @@ class Map:
     def slime_combat():
     #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_2 == False:
-            win.blit(Map.SlimeFight, (0, 0))
+            win.blit(Map.babyslime, (550, 350))
             pygame.display.update()
+            pygame.time.wait(1000)
+            Map.slime = Map.slimedown
+            cell_3.blits(cell_3)
+            pygame.display.update()
+            pygame.time.wait(500)
+            Map.slime = Map.bigslime
+            cell_3.blits(cell_3)
+            pygame.display.update()
+            pygame.time.wait(1000)
             sound(encounter)
-            result = battle("Slime", 10, 50, playerStr, playerHP, playerSpeed, 10)
-            print(stats.playerHP)
-            while stats.playerHP <= 0:
+            for size in range(150, 2000, 75):
+                win.blits(((cell_3.colour, (0, 0)), (Map.bigslime, ((625-size/2), (425-size/1.75)))))
+                Map.bigslime = pygame.transform.scale(Map.bigslime, (size, size))
+                pygame.display.update()
+                pygame.time.wait(20)
+
+            result = battle("Slime", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            print(Stats.playerHP)
+            while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
                 pygame.display.update()
                 pygame.time.wait(5000)
@@ -195,7 +216,8 @@ class Map:
                 cell_1.blits(cell_1) #displays sprites
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
                     if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
-                        Heal(1000)
+                        Heal(100)
+                        #print(Stats.playerHP)
                         #for interacting with campfire
                     
                 if player.top <= 0:
@@ -239,14 +261,14 @@ class Map:
                     cell_change_anim(550, 1, cell_4, cell_2)
                     cell_2()
                 elif player.left <= 0:
-                    cell_change_anim((window_width - 101), player_y, cell_4, cell_7)
+                    cell_change_anim((window_width - 101), 359, cell_4, cell_7)
                     cell_7()
             #cell_4 stuff (right from main)
 
             elif cell == "treasure":
                 cell_7.blits(cell_7)
                 if player.right >= window_width:
-                    cell_change_anim(1, player_y, cell_7, cell_4)
+                    cell_change_anim(1, 280, cell_7, cell_4)
                     cell_4()
 
             elif cell == "alien":
@@ -255,13 +277,13 @@ class Map:
                     cell_change_anim(550, 1, cell_5, cell_3)
                     cell_3()
                 elif player.right >= window_width:
-                    cell_change_anim(1, player_y, cell_5, cell_6)
+                    cell_change_anim(1, 425, cell_5, cell_6)
                     cell_6()
             
             elif cell == "curve":
                 cell_6.blits(cell_6)
                 if player.left <= 0:
-                    cell_change_anim((window_width - 101), player_y, cell_6, cell_5)
+                    cell_change_anim((window_width - 101), 280, cell_6, cell_5)
                     cell_5()
                 elif player.top <= 0:
                     cell_change_anim(550, (window_height - 101), cell_6, cell_8)
@@ -270,7 +292,7 @@ class Map:
             elif cell == "exit":
                 cell_8.blits(cell_8)
                 if player.bottom >= window_height:
-                    cell_change_anim(1000, 1, cell_8, cell_6)
+                    cell_change_anim(920, 1, cell_8, cell_6)
                     cell_6()
 
             elif cell == "right":
@@ -405,7 +427,10 @@ class cell_3(Map):
         win.blit(self.colour, (0, 0))
 
         if Map.combat_2 == False:
-            win.blit(Map.SlimeFight, (0, 0))
+            win.blit(Map.slime, (550, 350))
+        elif Map.slime == Map.bigslime and Map.combat_2 == False:
+                    win.blit(Map.slime, (550, 340))
+
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -476,7 +501,7 @@ class cell_6(Map):
     rect4 = pygame.Rect(800, 525, 400, 275)
     colour = pygame.transform.scale(bend, (window_width, window_height))
     stage = "curve"
-    rects = []
+    rects = [rect1, rect2, rect3, rect4]
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
@@ -495,9 +520,14 @@ class cell_6(Map):
             win.blit(front, player)
             
 class cell_7(Map):
+    rect1 = pygame.Rect(0, 0, 1200, 120)
+    rect2 = pygame.Rect(0, 0, 230, 800)
+    rect3 = pygame.Rect(600, 0, 600, 300)
+    rect4 = pygame.Rect(630, 475, 570, 325)
+    rect5 = pygame.Rect(0, 640, 1200, 160)
     colour = pygame.transform.scale(treasureroom, (window_width, window_height))
     stage = "treasure"
-    rects = []
+    rects = [rect1, rect2, rect3, rect4, rect5]
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
@@ -517,9 +547,12 @@ class cell_7(Map):
             win.blit(front, player)
 
 class cell_8(Map):
+    rect1 = pygame.Rect(0, 0, 380, 800)
+    rect2 = pygame.Rect(790, 0, 410, 800)
+    exitrect = pygame.Rect(380, 0, 410, 200)
     colour = pygame.transform.scale(caveend, (window_width, window_height))
     stage = "exit"
-    rects = []
+    rects = [rect1, rect2]
     def __init__(self):
         Map.bg = self.colour
         Map.stage = self.stage
@@ -528,7 +561,7 @@ class cell_8(Map):
     
     def blits(self):
         win.blit(self.colour, (0, 0))
-        
+
         if Map.facing == "up":
             win.blit(back, player)
         elif Map.facing == "right":

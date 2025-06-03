@@ -481,6 +481,7 @@ class cell_4(Map):
     stage = "slime"
     rects = [rect1, rect2, rect3, rect4]
     def __init__(self):
+        #Still playing cave music after, WILL FIX
         global current_music
         if current_music != cave:
             music(cave)

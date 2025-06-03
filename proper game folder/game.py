@@ -48,6 +48,13 @@ encounter = pygame.mixer.Sound(sound_collection[1])
 end = pygame.transform.scale(end, (1200, 800))
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
+#audios
+current_music = None 
+cave = music_collection[1]
+fire_audio = pygame.mixer.Sound(sound_collection[3])
+bridge_audio = music_collection[3]
+void_audio = music_collection[4]
+
     
 #fade in and out when changing cells
 def cell_change_anim(x_pos, y_pos, c1, c2):
@@ -101,6 +108,10 @@ class Map:
                 
     def __init__(self):
         #starts game
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         if self.running == True:
             Map.game(Map.bg, Map.stage, Map.running)
             
@@ -125,6 +136,10 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(5000)
                 pygame.quit()
+
+            global current_music
+            music(cave)
+            current_music = cave
 
             Map.combat_1 = True
     def slime_combat():
@@ -155,6 +170,10 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(5000)
                 pygame.quit()
+
+            global current_music
+            music(bridge_audio)
+            current_music = bridge_audio
 
             Map.combat_2 = True
             
@@ -387,6 +406,10 @@ class cell_2(Map):
     imgs = [img_1, img_2]
     
     def __init__(self):
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         Map.mole_combat()
         Map.bg = self.colour
         Map.stage = self.stage
@@ -418,7 +441,14 @@ class cell_3(Map):
     rects = [rect1, rect2]
 
     def __init__(self):
-        Map.slime_combat()
+        global current_music
+        print("cell_3 init, current_music:", current_music)
+        if current_music != bridge_audio:
+            print("Setting bridge music")
+            music(bridge_audio)
+            current_music = bridge_audio
+        if not Map.combat_2:
+            Map.slime_combat()
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -451,6 +481,10 @@ class cell_4(Map):
     stage = "slime"
     rects = [rect1, rect2, rect3, rect4]
     def __init__(self):
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -479,6 +513,10 @@ class cell_5(Map):
     stage = "alien"
     rects = [rect1, rect2, rect3, rect4, rect5, rect6, ship]
     def __init__(self):
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -504,6 +542,10 @@ class cell_6(Map):
     stage = "curve"
     rects = [rect1, rect2, rect3, rect4]
     def __init__(self):
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -530,6 +572,10 @@ class cell_7(Map):
     stage = "treasure"
     rects = [rect1, rect2, rect3, rect4, rect5]
     def __init__(self):
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -555,6 +601,10 @@ class cell_8(Map):
     stage = "exit"
     rects = [rect1, rect2]
     def __init__(self):
+        global current_music
+        if current_music != cave:
+            music(cave)
+            current_music = cave
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -577,6 +627,10 @@ class cell_9(Map):
     stage = "blank"
     rects = []
     def __init__(self):
+        global current_music
+        if current_music != void_audio:
+            music(void_audio)
+            current_music = void_audio
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects

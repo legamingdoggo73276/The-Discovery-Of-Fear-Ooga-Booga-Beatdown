@@ -3,6 +3,7 @@ from fight import battle
 import stats
 from healthbar import *
 from audio import *
+from video import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -54,6 +55,7 @@ cave = music_collection[1]
 fire_audio = pygame.mixer.Sound(sound_collection[3])
 bridge_audio = music_collection[3]
 void_audio = music_collection[4]
+outro_played = False
 
     
 #fade in and out when changing cells
@@ -80,6 +82,15 @@ def cell_change_anim(x_pos, y_pos, c1, c2):
         pygame.display.update()
         pygame.time.wait(5)
         alpha -= 5
+
+def ending_fade():
+    fadeOut = pygame.Surface((window_width, window_height)).convert_alpha()
+    fadeOut.fill((0, 0, 0))
+    for alpha in range(0, 256, 10):
+        fadeOut.set_alpha(alpha)
+        win.blit(fadeOut, (0, 0))
+        pygame.display.update()
+        pygame.time.wait(20)
 
 
 
@@ -314,11 +325,29 @@ class Map:
                 if player.bottom >= window_height:
                     cell_change_anim(920, 1, cell_8, cell_6)
                     cell_6()
+                elif player.top <= 0:
+                    cell_change_anim(550, (window_height - 101), cell_8, cell_9)
+                    cell_9()
 
             elif cell == "right":
                 if player.left <= 0:
                     cell_change_anim((window_width - 101), player_y, cell_4, cell_1)
                     cell_1()
+
+            elif cell == "void":
+                #global outro_played
+                #if not outro_played:
+                    #ending_fade()
+                    #play_video("outro.MOV", win)
+                    #outro_played = True
+                    #pygame.quit()
+                    #sys.exit()
+                    # Show white screen, fade, play video, etc.
+                    # (see previous answers for code)
+                #else:
+                    cell_9.blits(cell_9)
+                ##cell_change_anim(550, (window_height - 101))
+                #pygame.time.wait(1000)
 
             pygame.display.update()
                 
@@ -635,7 +664,6 @@ class cell_9(Map):
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
-        Map()
     
     def blits(self):
         win.blit(self.colour, (0, 0))

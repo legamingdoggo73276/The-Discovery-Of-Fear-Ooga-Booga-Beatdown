@@ -80,6 +80,8 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
     #combat_message displayed once at beginning of battle
     combat_message = f"A {enemyType} attacks you! |Strength: {enemyStr} HP: {enemyHP}"
 
+    music(combatmusic)
+    pygame.mixer.music.set_volume(0.6)
     #this loop keeps going until the end of the battle
     fighting = True
     while fighting:
@@ -100,6 +102,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                             fighting = False
                         playerHP -= enemyStr
                         if playerHP <= 0:
+                            pygame.mixer.music.fadeout(1000)
                             print("died")
                             Stats.playerHP = playerHP
                             return "player loss"
@@ -108,6 +111,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     else:
                         Stats.playerHP -= enemyStr
                         if Stats.playerHP <= 0:
+                            pygame.mixer.music.fadeout(1000)
                             return "player loss"
                         enemyHP -= Stats.playerStr
                         if enemyHP <= 0:
@@ -122,11 +126,13 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                     if run <= 1:
                         flee_blits()
                         Stats.playerHP = playerHP
+                        pygame.mixer.music.fadeout(1000)
                         return "You ran away!"
                     #if unsucessful, enemy attacks as normal and your turn is skipped.
                     else:
                         playerHP -= enemyStr
                         if playerHP <= 0:
+                            pygame.mixer.music.fadeout(1000)
                             return "player loss"
                         #new combat_message describing failed escape. Sucess does not need a combat_message as loop is exited.
                         combat_message = f"You could not get away. The {enemyType} attacked you. |Enemy HP: {enemyHP}"
@@ -168,5 +174,6 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
 
     #Default return. If the loop is exited without any return value.
     Stats.playerHP = playerHP
+    pygame.mixer.music.fadeout(1000)
     return "enemy vanquished"
     

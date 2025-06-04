@@ -25,6 +25,7 @@ clock = pygame.time.Clock()
 cave0 = pygame.image.load("images/startingroom.png").convert_alpha()
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
+bat = pygame.image.load("images/bat.png").convert_alpha()
 slimefight = pygame.image.load("images/slimecombat.png").convert_alpha()
 slime1 = pygame.image.load("images/babyslime.png").convert_alpha()
 slime2 = pygame.image.load("images/slimedown.png").convert_alpha()
@@ -107,6 +108,7 @@ class Map:
     babyslime = pygame.transform.scale(slime1, (100, 100))
     slimedown = pygame.transform.scale(slime2, (100, 100))
     bigslime = pygame.transform.scale(slime3, (150, 150))
+    batimg = pygame.transform.scale(bat, (50, 50))
     slime = babyslime
     
     #these variables get changed when cells are entered
@@ -117,6 +119,7 @@ class Map:
     imgs = []
     combat_1 = False
     combat_2 = False
+    combat_3 = False
     spear_obtain = False
     facing = "down"
     obtain_message = "Error"
@@ -191,6 +194,33 @@ class Map:
             current_music = bridge_audio
 
             Map.combat_2 = True
+
+    def bat_combat():
+        #can call combat function here, makes it not repeat upon re-entering room
+        if Map.combat_3 == False:
+            win.blit(Map.batimg, (550, 350))
+            pygame.display.update()
+            pygame.time.wait(1000)
+            sound(encounter)
+            for size in range(50, 2000, 50):
+                win.blits(((cell_8.colour, (0,0)), (Map.batimg, ((600-size/2), (400-size/1.75)))))
+                Map.batimg = pygame.transform.scale(Map.batimg, (size, size))                
+                pygame.display.update()
+                pygame.time.wait(10)
+
+            result = fight.battle("Bat", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            print(Stats.playerHP)
+            while Stats.playerHP <= 0:
+                win.blit(end, (0, 0))
+                pygame.display.update()
+                pygame.time.wait(5000)
+                pygame.quit()
+
+            global current_music
+            music(cave)
+            current_music = cave
+
+            Map.combat_3 = True
             
     def item_obtain(item):
         gainStrength(10)
@@ -199,7 +229,11 @@ class Map:
         textbox = textboximage.get_rect()
         win.blits(((textboximage, (500, 500)), (Map.obtain_message, (500, 500))))
         pygame.time.wait(2000)
-
+    
+    def healthbarprint():
+        health_bar.hp = Stats.playerHP
+        health_bar.draw(win)
+        win.blit(heart,(950,5))
 
 
     def game(bg, cell, run):
@@ -262,7 +296,7 @@ class Map:
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
                     if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
                         Heal(100)
-                        #print(Stats.playerHP)
+                        print(Stats.playerHP)
                         #for interacting with campfire
                 if player.top <= 0:
                     #calls the fade animation
@@ -384,6 +418,7 @@ class starting_cell(Map):
         Map()
     def blits(self):
         win.blit(self.bg, (0, 0))
+        Map.healthbarprint()
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -423,6 +458,7 @@ class cell_1(Map):
         #blits all the sprites for this room on the screen
         #the line under this is the background and the campfire
         win.blits(((self.bg, (0,0)), (self.imgs[2], self.rects[6])))
+        Map.healthbarprint()
 
         #blits a different version of the caveman depending on which way you're facing
         if Map.facing == "up":
@@ -462,6 +498,7 @@ class cell_2(Map):
     def blits(self):
         #blits all the sprites on the screen
         win.blit(self.colour, (0, 0)) #this one is the background
+        Map.healthbarprint()
 
         if Map.combat_1 == False: #mole sprite, only if it hasnt been beaten
             win.blit(Map.moleimg, (550, 350))
@@ -498,6 +535,7 @@ class cell_3(Map):
         
     def blits(self):
         win.blit(self.colour, (0, 0))
+        Map.healthbarprint()
 
         if Map.combat_2 == False:
             win.blit(Map.slime, (550, 350))
@@ -534,6 +572,7 @@ class cell_4(Map):
         Map()
     def blits(self):
         win.blit(self.colour, (0, 0))
+        Map.healthbarprint()
         
         if Map.facing == "up":
             win.blit(back, player)
@@ -566,6 +605,7 @@ class cell_5(Map):
         Map()
     def blits(self):
         win.blit(self.colour, (0, 0))
+        Map.healthbarprint()
         
         if Map.facing == "up":
             win.blit(back, player)
@@ -595,6 +635,7 @@ class cell_6(Map):
         Map()
     def blits(self):
         win.blit(self.colour, (0, 0))
+        Map.healthbarprint()
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -632,6 +673,7 @@ class cell_7(Map):
         
     def blits(self):
         win.blits(((self.colour, (0, 0)), (self.imgs[0], (500,500))))
+        Map.healthbarprint()
         Map.spear_obtain = True
         
         if Map.facing == "up":
@@ -655,6 +697,7 @@ class cell_8(Map):
         if current_music != cave:
             music(cave)
             current_music = cave
+        Map.bat_combat()
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -662,6 +705,7 @@ class cell_8(Map):
     
     def blits(self):
         win.blit(self.colour, (0, 0))
+        Map.healthbarprint()
 
         if Map.facing == "up":
             win.blit(back, player)

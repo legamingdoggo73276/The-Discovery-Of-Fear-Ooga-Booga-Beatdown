@@ -120,6 +120,7 @@ class Map:
     combat_1 = False
     combat_2 = False
     combat_3 = False
+    combat_4 = False
     spear_obtain = False
     facing = "down"
     obtain_message = "Error"
@@ -142,8 +143,8 @@ class Map:
             sound(encounter)
             #makes the mole grow and start combat
             for size in range(50, 2000, 50):
-                win.blits(((cell_2.colour, (0,0)), (Map.moleimg, ((600-size/2), (400-size/1.75)))))
-                Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))                
+                win.blits(((cell_2.colour, (0,0)), (back, player), (Map.moleimg, ((600-size/2), (400-(size/1.9))))))
+                Map.moleimg = pygame.transform.scale(Map.moleimg, (size, size))
                 pygame.display.update()
                 pygame.time.wait(10)
                 
@@ -176,7 +177,7 @@ class Map:
             pygame.time.wait(1000)
             sound(encounter)
             for size in range(150, 2000, 75):
-                win.blits(((cell_3.colour, (0, 0)), (Map.bigslime, ((625-size/2), (425-size/1.75)))))
+                win.blits(((cell_3.colour, (0, 0)), (back, player), (Map.bigslime, ((600-size/2), (400-size/1.75)))))
                 Map.bigslime = pygame.transform.scale(Map.bigslime, (size, size))
                 pygame.display.update()
                 pygame.time.wait(20)
@@ -221,16 +222,33 @@ class Map:
             current_music = cave
 
             Map.combat_3 = True
+        
+    def alien_combat():
+        if not Map.combat_4:
+            win.blit(Map.batimg, (950, 350))
+            pygame.display.update()
+            pygame.time.wait(2000)
+            sound(encounter)
+            for size in range(50, 2000, 50):
+                win.blits(((cell_6.colour, (0, 0)), (right, player), (Map.batimg, ((950-size/1.3), (400-size/1.75)))))
+                Map.batimg = pygame.transform.scale(Map.batimg, (size, size))
+                pygame.display.update()
+                pygame.time.wait(10)
+                
+            result = fight.battle("Alien", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            Map.combat_4 = True
             
     def item_obtain(item):
-        if item == spear:
+        if item == "spear":
             gainStrength(5)
-        #elif item == raygun:
+        #elif item == "raygun":
             #gainStrength(10)
         Map.obtain_message = font.render(f"You have obtained the {item}!", True, "red")
-        textboximage = pygame.transform.scale(textboximage, (340, 50))
-        textbox = textboximage.get_rect()
-        win.blits(((textboximage, (500, 500)), (Map.obtain_message, (500, 500))))
+        textboximg = pygame.transform.scale(textboximage, (600, 50))
+        #textboxrect = textboximage.get_rect()
+        win.blits(((textboximg, (450, 500)), (Map.obtain_message, (500, 500))))
+        win.blit(Map.obtain_message, (500, 500))
+        pygame.display.update()
         pygame.time.wait(2000)
     
     def healthbarprint():
@@ -341,13 +359,13 @@ class Map:
                 elif player.left <= 0:
                     cell_change_anim((window_width - 101), 359, cell_4, cell_7)
                     cell_7()
-            #cell_4 stuff (right from main)
+            #cell_4 stuff (slime)
 
             elif cell == "treasure":
                 cell_7.blits(cell_7)
                 if player.colliderect(cell_7.spearrect) and not Map.spear_obtain:
-                    Map.spear_obtain == True
-                    Map.item_obtain(spear)
+                    Map.spear_obtain = True
+                    Map.item_obtain("spear")
                     print(Stats.playerStr)
                 if player.right >= window_width:
                     cell_change_anim(1, 280, cell_7, cell_4)
@@ -542,10 +560,10 @@ class cell_3(Map):
         win.blit(self.colour, (0, 0))
         Map.healthbarprint()
 
-        if Map.combat_2 == False:
+        if Map.slime != Map.bigslime and Map.combat_2 == False:
             win.blit(Map.slime, (550, 350))
         elif Map.slime == Map.bigslime and Map.combat_2 == False:
-                    win.blit(Map.slime, (550, 340))
+                    win.blit(Map.slime, (500, 300))
 
 
         if Map.facing == "up":
@@ -634,6 +652,9 @@ class cell_6(Map):
         if current_music != cave:
             music(cave)
             current_music = cave
+        if not Map.combat_4:
+            Map.alien_combat()
+
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
@@ -641,6 +662,9 @@ class cell_6(Map):
     def blits(self):
         win.blit(self.colour, (0, 0))
         Map.healthbarprint()
+        
+        if not Map.combat_4:
+            win.blit(Map.batimg, (950, 350))
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -657,8 +681,8 @@ class cell_7(Map):
     rect3 = pygame.Rect(600, 0, 600, 300)
     rect4 = pygame.Rect(630, 475, 570, 325)
     rect5 = pygame.Rect(0, 640, 1200, 160)
-    spearimg = pygame.transform.scale(spear, (50, 50))
-    spearrect = spear.get_rect(center=(400, 400))
+    spearimg = pygame.transform.scale(spear, (100, 100))
+    spearrect = spearimg.get_rect(center=(400, 400))
     colour = pygame.transform.scale(treasureroom, (window_width, window_height))
     stage = "treasure"
     rects = [rect1, rect2, rect3, rect4, rect5]
@@ -677,7 +701,8 @@ class cell_7(Map):
     def blits(self):
         win.blit(self.colour, (0, 0))
         Map.healthbarprint()
-        if not Map.spear_obtain:
+        
+        if Map.spear_obtain == False:
             win.blit(self.spearimg, (400, 400))
         
         if Map.facing == "up":

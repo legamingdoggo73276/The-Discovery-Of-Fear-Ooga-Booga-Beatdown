@@ -26,8 +26,8 @@ punch = pygame.mixer.Sound(sound_collection[2])
 
 #The molerat
 molerat = pygame.image.load("images/molerat.png").convert_alpha()
-dead_molerat = pygame.image.load("images/dead_molerat.png").convert_alpha()
 molerat = pygame.transform.scale(molerat, (1200, 800))
+dead_molerat = pygame.image.load("images/dead_molerat.png").convert_alpha()
 dead_molerat = pygame.transform.scale(dead_molerat, (1200,800))
 slime = pygame.image.load("images/slimecombat.png").convert_alpha()
 slime = pygame.transform.scale(slime, (window_width, window_height))
@@ -35,6 +35,10 @@ dead_slime = pygame.image.load("images/dead_slime.png").convert_alpha()
 dead_slime = pygame.transform.scale(dead_slime, (1200, 800))
 bat = pygame.image.load("images/batREAL.png").convert_alpha()
 bat = pygame.transform.scale(bat, (1200, 800))
+alienfight = pygame.image.load("images/alienfight.png").convert_alpha()
+alienfight = pygame.transform.scale(alienfight, (1200, 800))
+dead_alien = pygame.image.load("images/alien_dead.png").convert_alpha()
+dead_alien = pygame.transform.scale(dead_alien, (1200, 800))
 
 #Text 
 attack_text = font.render("Attack", True, "red")
@@ -70,6 +74,9 @@ def slimeblits():
 def batblits():
     combat.blits(((bat, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (textboximage, (830,750)), (strength, (850, 750))))
 
+def alienblits():
+    combat.blits(((alienfight, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (attack_text, (button.x +10, button.y + 5)), (flee_text, (button2.x +10, button2.y +5)), (textboximage, (830,750)), (strength, (850, 750))))
+
 def mole_victory_blits():
     combat.blits(((dead_molerat, (0,0)), (victory_text, (600,400))))
     pygame.display.update()
@@ -82,6 +89,11 @@ def slime_victory_blits():
 
 def bat_victory_blits():
     combat.blits(((image1, (0,0)), (victory_text, (600,400))))
+    pygame.display.update()
+    pygame.time.wait(2000)
+    
+def alien_victory_blits():
+    combat.blits(((dead_alien, (0, 0)), (victory_text, (600, 400))))
     pygame.display.update()
     pygame.time.wait(2000)
 
@@ -180,6 +192,8 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 slimeblits()
             elif enemyType == "Bat":
                 batblits()
+            elif enemyType == "Alien":
+                alienblits()
             blit_text(combat, combat_message, (100, 100), font, "red")
             health_bar.draw(combat)
             combat.blit(heart,(950,5))
@@ -191,6 +205,8 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                 slime_victory_blits()
             elif enemyType == "Bat":
                 bat_victory_blits()
+            if enemyType == "Alien":
+                alien_victory_blits()
             fighting = False
         pygame.display.flip()
 

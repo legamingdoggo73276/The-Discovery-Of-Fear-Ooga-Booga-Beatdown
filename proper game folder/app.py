@@ -1,9 +1,5 @@
 import pygame
 from game import *
-from fight import battle
-import stats
-from healthbar import *
-#from menus import *
 from audio import *
 pygame.font.init()
 pygame.init()

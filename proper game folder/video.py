@@ -33,17 +33,18 @@ def play_video(video_path, screen=None):
         if not ret:
             break
 
-        frame = cv2.rotate(frame, cv2.ROTATE_180)
+        #Before rotated video, don't need anymore
+        #frame = cv2.rotate(frame, cv2.ROTATE_180)
         #Convert OpenCV BGR to pygame RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # Convert to Pygame surface
+        #Convert to Pygame surface
         frame_surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
 
-        # Scale to match the screen size
+        #Scale to match the screen size
         scaled_surface = pygame.transform.scale(frame_surface, screen.get_size())
 
-        # Draw the scaled video frame
+        #Draw the scaled video frame
         screen.blit(scaled_surface, (0, 0))
 
         #Close window 
@@ -62,4 +63,4 @@ def play_video(video_path, screen=None):
 
 
 ###code test
-#play_video("outro.MOV") 
+play_video("images/outro1.mp4") 

@@ -349,6 +349,8 @@ class Map:
                 ##cell_change_anim(550, (window_height - 101))
                 #pygame.time.wait(1000)
 
+                #NEW IDEA, have buttons to say if player wants to explore or go back into cave
+
             pygame.display.update()
                 
 

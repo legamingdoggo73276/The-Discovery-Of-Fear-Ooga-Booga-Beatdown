@@ -63,4 +63,4 @@ def play_video(video_path, screen=None):
 
 
 ###code test
-play_video("images/outro1.mp4") 
+#play_video("images/outro1.mp4") 

@@ -223,7 +223,10 @@ class Map:
             Map.combat_3 = True
             
     def item_obtain(item):
-        gainStrength(10)
+        if item == spear:
+            gainStrength(5)
+        #elif item == raygun:
+            #gainStrength(10)
         Map.obtain_message = font.render(f"You have obtained the {item}!", True, "red")
         textboximage = pygame.transform.scale(textboximage, (340, 50))
         textbox = textboximage.get_rect()
@@ -342,8 +345,10 @@ class Map:
 
             elif cell == "treasure":
                 cell_7.blits(cell_7)
-                if player.colliderect(Map.obstacles[5]):
+                if player.colliderect(cell_7.spearrect) and not Map.spear_obtain:
+                    Map.spear_obtain == True
                     Map.item_obtain(spear)
+                    print(Stats.playerStr)
                 if player.right >= window_width:
                     cell_change_anim(1, 280, cell_7, cell_4)
                     cell_4()
@@ -652,8 +657,8 @@ class cell_7(Map):
     rect3 = pygame.Rect(600, 0, 600, 300)
     rect4 = pygame.Rect(630, 475, 570, 325)
     rect5 = pygame.Rect(0, 640, 1200, 160)
-    item = pygame.transform.scale(spear, (100, 100))
-    spear = item.get_rect(center=(500, 200))
+    spearimg = pygame.transform.scale(spear, (50, 50))
+    spearrect = spear.get_rect(center=(400, 400))
     colour = pygame.transform.scale(treasureroom, (window_width, window_height))
     stage = "treasure"
     rects = [rect1, rect2, rect3, rect4, rect5, spear]
@@ -674,7 +679,8 @@ class cell_7(Map):
     def blits(self):
         win.blits(((self.colour, (0, 0)), (self.imgs[0], (500,500))))
         Map.healthbarprint()
-        Map.spear_obtain = True
+        if not Map.spear_obtain:
+            win.blit(self.spearimg, (400, 400))
         
         if Map.facing == "up":
             win.blit(back, player)

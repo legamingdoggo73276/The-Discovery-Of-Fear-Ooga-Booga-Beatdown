@@ -1,9 +1,8 @@
 import pygame
-from fight import battle
+import fight
 import stats
 from healthbar import *
 from audio import *
-from video import *
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -38,6 +37,7 @@ alienroom = pygame.image.load("images/alien.png").convert_alpha()
 void = pygame.image.load("images/void.png").convert_alpha()
 bend = pygame.image.load("images/bend.png").convert_alpha()
 treasureroom = pygame.image.load("images/treasure.png").convert_alpha()
+spear = pygame.image.load("images/spear.png").convert_alpha()
 front = pygame.image.load("images/caveman.png").convert_alpha()
 back = pygame.image.load("images/back.png").convert_alpha()
 right = pygame.image.load('images/right.png').convert_alpha()
@@ -45,6 +45,8 @@ left = pygame.image.load("images/left.png").convert_alpha()
 fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
+textboximage = pygame.image.load("images/TextBox.png").convert_alpha()
+font = pygame.font.Font('PanicStricken.ttf', 40)
 encounter = pygame.mixer.Sound(sound_collection[1])
 end = pygame.transform.scale(end, (1200, 800))
 player = front.get_rect(center=((window_width/2), (window_height/2)))
@@ -115,7 +117,9 @@ class Map:
     imgs = []
     combat_1 = False
     combat_2 = False
+    spear_obtain = False
     facing = "down"
+    obtain_message = "Error"
                 
     def __init__(self):
         #starts game
@@ -125,7 +129,7 @@ class Map:
             current_music = cave
         if self.running == True:
             Map.game(Map.bg, Map.stage, Map.running)
-            
+
     def mole_combat():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
@@ -140,7 +144,7 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(10)
                 
-            result = battle("Mole Rat", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            result = fight.battle("Mole Rat", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
             print(Stats.playerHP)
             while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
@@ -154,7 +158,7 @@ class Map:
 
             Map.combat_1 = True
     def slime_combat():
-    #can call combat function here, makes it not repeat upon re-entering room
+        #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_2 == False:
             win.blit(Map.babyslime, (550, 350))
             pygame.display.update()
@@ -174,7 +178,7 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(20)
 
-            result = battle("Slime", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            result = fight.battle("Slime", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
             print(Stats.playerHP)
             while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
@@ -188,6 +192,16 @@ class Map:
 
             Map.combat_2 = True
             
+    def item_obtain(item):
+        gainStrength(10)
+        Map.obtain_message = font.render(f"You have obtained the {item}!", True, "red")
+        textboximage = pygame.transform.scale(textboximage, (340, 50))
+        textbox = textboximage.get_rect()
+        win.blits(((textboximage, (500, 500)), (Map.obtain_message, (500, 500))))
+        pygame.time.wait(2000)
+
+
+
     def game(bg, cell, run):
         #called by init to start game
         while run:
@@ -242,7 +256,7 @@ class Map:
                     cell_change_anim(550, (window_height - 101), starting_cell, cell_1)
                     #calls cell_1 function
                     cell_1()
-                    
+
             elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
@@ -250,7 +264,6 @@ class Map:
                         Heal(100)
                         #print(Stats.playerHP)
                         #for interacting with campfire
-                    
                 if player.top <= 0:
                     #calls the fade animation
                     cell_change_anim(550, (window_height - 101), cell_1, cell_2)
@@ -259,9 +272,7 @@ class Map:
                 elif player.bottom >= window_height:
                     cell_change_anim(550, 1, cell_1, starting_cell)
                     starting_cell()
-                    
-                
-                    
+            
             #when player is in cell_2 (go up from main cell), displays sprites from cell_2
             elif cell == "up":
                 cell_2.blits(cell_2)
@@ -282,7 +293,6 @@ class Map:
                     cell_change_anim(550, (window_height - 101), cell_3, cell_5)
                     cell_5()
 
-                    
             elif cell == "slime":
                 cell_4.blits(cell_4)
                 if player.top <= 0:
@@ -298,6 +308,8 @@ class Map:
 
             elif cell == "treasure":
                 cell_7.blits(cell_7)
+                if player.colliderect(Map.obstacles[5]):
+                    Map.item_obtain(spear)
                 if player.right >= window_width:
                     cell_change_anim(1, 280, cell_7, cell_4)
                     cell_4()
@@ -352,7 +364,6 @@ class Map:
                 #NEW IDEA, have buttons to say if player wants to explore or go back into cave
 
             pygame.display.update()
-                
 
         pygame.quit()
 
@@ -600,9 +611,14 @@ class cell_7(Map):
     rect3 = pygame.Rect(600, 0, 600, 300)
     rect4 = pygame.Rect(630, 475, 570, 325)
     rect5 = pygame.Rect(0, 640, 1200, 160)
+    item = pygame.transform.scale(spear, (100, 100))
+    spear = item.get_rect(center=(500, 200))
     colour = pygame.transform.scale(treasureroom, (window_width, window_height))
     stage = "treasure"
-    rects = [rect1, rect2, rect3, rect4, rect5]
+    rects = [rect1, rect2, rect3, rect4, rect5, spear]
+    imgs = [item]
+
+    
     def __init__(self):
         global current_music
         if current_music != cave:
@@ -611,10 +627,12 @@ class cell_7(Map):
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
+        Map.imgs = self.imgs
         Map()
         
     def blits(self):
-        win.blit(self.colour, (0, 0))
+        win.blits(((self.colour, (0, 0)), (self.imgs[0], (500,500))))
+        Map.spear_obtain = True
         
         if Map.facing == "up":
             win.blit(back, player)

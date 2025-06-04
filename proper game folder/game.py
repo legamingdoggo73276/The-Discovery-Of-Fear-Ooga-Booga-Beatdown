@@ -661,9 +661,7 @@ class cell_7(Map):
     spearrect = spear.get_rect(center=(400, 400))
     colour = pygame.transform.scale(treasureroom, (window_width, window_height))
     stage = "treasure"
-    rects = [rect1, rect2, rect3, rect4, rect5, spear]
-    imgs = [item]
-
+    rects = [rect1, rect2, rect3, rect4, rect5]
     
     def __init__(self):
         global current_music
@@ -677,7 +675,7 @@ class cell_7(Map):
         Map()
         
     def blits(self):
-        win.blits(((self.colour, (0, 0)), (self.imgs[0], (500,500))))
+        win.blit(self.colour, (0, 0))
         Map.healthbarprint()
         if not Map.spear_obtain:
             win.blit(self.spearimg, (400, 400))

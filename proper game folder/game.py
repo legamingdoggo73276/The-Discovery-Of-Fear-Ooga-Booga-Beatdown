@@ -37,7 +37,7 @@ cave3 = pygame.image.load("images/cave3.png").convert_alpha()
 cave4 = pygame.image.load("images/slimeroom.png").convert_alpha()
 caveend = pygame.image.load("images/CaveExit.png").convert_alpha()
 alienroom = pygame.image.load("images/alien.png").convert_alpha()
-void = pygame.image.load("images/void.png").convert_alpha()
+void = pygame.image.load("images/wellesley_station.png").convert_alpha()
 bend = pygame.image.load("images/bend.png").convert_alpha()
 treasureroom = pygame.image.load("images/treasure.png").convert_alpha()
 spear = pygame.image.load("images/spear.png").convert_alpha()
@@ -769,6 +769,8 @@ class cell_8(Map):
             win.blit(front, player)
 
 class cell_9(Map):
+    #rect for when player meets bench :]
+    #rect1 = pygame.Rect()
     colour = pygame.transform.scale(void, (window_width, window_height))
     stage = "blank"
     rects = []

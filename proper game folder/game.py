@@ -3,6 +3,7 @@ import fight
 import stats
 from healthbar import *
 from audio import *
+from outro import play_outro
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -396,7 +397,7 @@ class Map:
                     cell_6()
                 elif player.top <= 0:
                     cell_change_anim(550, (window_height - 101), cell_8, cell_9)
-                    cell_9()
+                    cell = "void"
 
             elif cell == "right":
                 if player.left <= 0:
@@ -404,21 +405,15 @@ class Map:
                     cell_1()
 
             elif cell == "void":
-                #global outro_played
-                #if not outro_played:
-                    #ending_fade()
-                    #play_video("outro.MOV", win)
-                    #outro_played = True
-                    #pygame.quit()
-                    #sys.exit()
-                    # Show white screen, fade, play video, etc.
-                    # (see previous answers for code)
-                #else:
+                global outro_played
+                if not outro_played:
+                    pygame.time.wait(10000)
+                    ending_fade()
+                    play_outro(win)
+                    outro_played = True
+                    pygame.quit()
+                else:
                     cell_9.blits(cell_9)
-                ##cell_change_anim(550, (window_height - 101))
-                #pygame.time.wait(1000)
-
-                #NEW IDEA, have buttons to say if player wants to explore or go back into cave
 
             pygame.display.update()
 

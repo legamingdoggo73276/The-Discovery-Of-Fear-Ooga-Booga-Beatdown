@@ -155,7 +155,7 @@ def battle(enemyType, enemyStr, enemyHP, playerStr, playerHP, playerSpeed, enemy
                         flee_blits()
                         Stats.playerHP = playerHP
                         pygame.mixer.music.fadeout(1000)
-                        return "You ran away!"
+                        return "player flees!"
                     #if unsucessful, enemy attacks as normal and your turn is skipped.
                     else:
                         playerHP -= enemyStr

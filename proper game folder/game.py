@@ -111,6 +111,7 @@ class Map:
     slimedown = pygame.transform.scale(slime2, (100, 100))
     bigslime = pygame.transform.scale(slime3, (150, 150))
     batimg = pygame.transform.scale(bat, (50, 50))
+    alienguy = pygame.transform.scale(alienguy, (50, 50))
     slime = babyslime
     
     #these variables get changed when cells are entered
@@ -162,7 +163,12 @@ class Map:
             music(cave)
             current_music = cave
 
-            Map.combat_1 = True
+            if result == "player flees!":
+                Map.combat_1 = False
+                cell_change_anim(550, 1, cell_2, cell_1)
+                cell_1()
+            else:
+                Map.combat_1 = True
     def slime_combat():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_2 == False:
@@ -196,7 +202,12 @@ class Map:
             music(bridge_audio)
             current_music = bridge_audio
 
-            Map.combat_2 = True
+            if result == "player flees!":
+                Map.combat_2 = False
+                cell_change_anim(1000, 1, cell_3, cell_4)
+                cell_4()
+            else:
+                Map.combat_2 = True
 
     def bat_combat():
         #can call combat function here, makes it not repeat upon re-entering room
@@ -223,7 +234,12 @@ class Map:
             music(cave)
             current_music = cave
 
-            Map.combat_3 = True
+            if result == "player flees!":
+                Map.combat_3 = False
+                cell_change_anim(920, 1, cell_8, cell_6)
+                cell_6()
+            else:
+                Map.combat_3 = True
         
     def alien_combat():
         if not Map.combat_4:
@@ -238,8 +254,20 @@ class Map:
                 pygame.time.wait(10)
                 
             result = fight.battle("Alien", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
-            Map.combat_4 = True
-            
+
+            while Stats.playerHP <= 0:
+                win.blit(end, (0, 0))
+                pygame.display.update()
+                pygame.time.wait(5000)
+                pygame.quit()
+
+            if result == "player flees!":
+                Map.combat_4 = False
+                cell_change_anim((window_width - 101), 280, cell_6, cell_5)
+                cell_5()
+            else:
+                Map.combat_4 = True
+
     def item_obtain(item):
         if item == "spear":
             gainStrength(5)

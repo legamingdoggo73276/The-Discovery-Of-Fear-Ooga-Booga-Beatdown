@@ -27,6 +27,7 @@ cave0 = pygame.image.load("images/startingroom.png").convert_alpha()
 cave1 = pygame.image.load("images/cavemain.png").convert_alpha()
 mole = pygame.image.load("images/mole.png").convert_alpha()
 bat = pygame.image.load("images/bat.png").convert_alpha()
+alienguy = pygame.image.load("images/aliensprite.png").convert_alpha()
 slimefight = pygame.image.load("images/slimecombat.png").convert_alpha()
 slime1 = pygame.image.load("images/babyslime.png").convert_alpha()
 slime2 = pygame.image.load("images/slimedown.png").convert_alpha()
@@ -226,13 +227,13 @@ class Map:
         
     def alien_combat():
         if not Map.combat_4:
-            win.blit(Map.batimg, (950, 350))
+            win.blit(Map.alienguy, (950, 350))
             pygame.display.update()
             pygame.time.wait(2000)
             sound(encounter)
             for size in range(50, 2000, 50):
-                win.blits(((cell_6.colour, (0, 0)), (right, player), (Map.batimg, ((950-size/1.3), (400-size/1.75)))))
-                Map.batimg = pygame.transform.scale(Map.batimg, (size, size))
+                win.blits(((cell_6.colour, (0, 0)), (right, player), (Map.alienguy, ((950-size/1.3), (400-size/1.75)))))
+                Map.alienguy = pygame.transform.scale(Map.alienguy, (size, size))
                 pygame.display.update()
                 pygame.time.wait(10)
                 
@@ -658,7 +659,7 @@ class cell_6(Map):
         Map.healthbarprint()
         
         if not Map.combat_4:
-            win.blit(Map.batimg, (950, 350))
+            win.blit(Map.alienguy, (950, 350))
 
         if Map.facing == "up":
             win.blit(back, player)

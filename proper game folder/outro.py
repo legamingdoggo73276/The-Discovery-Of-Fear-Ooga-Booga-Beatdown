@@ -23,9 +23,12 @@ def play_outro(window):
                 "outro/86.png", "outro/87.png", "outro/88.png", "outro/89.png", "outro/90.png",
                 "outro/91.png", "outro/92.png", "outro/93.png", "outro/94.png", "outro/95.png",
                 "outro/96.png", "outro/97.png", "outro/98.png", "outro/99.png", "outro/100.png",
-                "outro/101.png", "outro/102.png", "outro/103.png", "outro/104.png"]
+                "outro/101.png", "outro/102.png", "outro/103.png", "outro/104.png",
+                 "outro/credits.png", "outro/thanks.png",
+                 ]
 
     for path in frame_path:
+        #if frame_path is not "outro/credits.png" or "outro/thanks.png":
         image = pygame.image.load(path).convert_alpha()
         image = pygame.transform.scale(image, (1200, 800))
         window.blit(image, (0, 0))

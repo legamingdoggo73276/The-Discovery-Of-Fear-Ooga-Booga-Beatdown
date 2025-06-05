@@ -1,5 +1,5 @@
 import pygame
-from app import *
+pygame.init()
 
 def play_outro(win):
     #Gonna be looping through every single photo.. wish me luck

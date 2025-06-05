@@ -6,6 +6,9 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
+window_height = 800
+window_width = 1200
+
 #window size and heading: DO NOT MODIFY 
 win = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown")

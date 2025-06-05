@@ -741,6 +741,7 @@ class cell_8(Map):
             win.blit(front, player)
 
 class cell_9(Map):
+    #rect for when player meets bench :]
     #rect1 = pygame.Rect()
     colour = pygame.transform.scale(void, (window_width, window_height))
     stage = "blank"

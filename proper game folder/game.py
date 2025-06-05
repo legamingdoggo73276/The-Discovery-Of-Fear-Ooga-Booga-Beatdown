@@ -3,7 +3,7 @@ import fight
 import stats
 from healthbar import *
 from audio import *
-#from outro import *
+from outro import play_outro
 
 #colours for later use, probably removed when game is done
 class Colours:
@@ -407,9 +407,8 @@ class Map:
             elif cell == "void":
                 global outro_played
                 if not outro_played:
-                    pygame.time.wait(10000)
                     ending_fade()
-                    #outro.play_outro(win)
+                    play_outro(win)
                     outro_played = True
                     pygame.quit()
                 else:

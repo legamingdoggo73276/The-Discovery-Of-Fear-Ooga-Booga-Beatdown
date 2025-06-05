@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 
-def play_outro(win):
+def play_outro(window):
     #Gonna be looping through every single photo.. wish me luck
     frame_path = ["outro/1.png", "outro/2.png", "outro/3.png", "outro/4.png", "outro/5.png", 
                 "outro/6.png", "outro/7.png", "outro/8.png", "outro/9.png", "outro/10.png",
@@ -28,7 +28,9 @@ def play_outro(win):
     for path in frame_path:
         image = pygame.image.load(path).convert_alpha()
         image = pygame.transform.scale(image, (1200, 800))
-        win.blit(image, (0, 0))
+        window.blit(image, (0, 0))
         pygame.display.update()
         #if the frame rate is weird, change the number here (right now it's half a second per frame)
-        pygame.time.wait(500)
+        pygame.time.wait(100)
+
+    pygame.quit()

@@ -14,7 +14,6 @@ window_height = 800
 window_width = 1200
 
 #Config of images sounds and font
-#TODO Put any new sounds here.
 font = pygame.font.Font('PanicStricken.ttf', 40)
 combat = pygame.display.set_mode((1200,800))
 pygame.display.set_caption("The Discovery Of Fear: Ooga Booga Beatdown - Combat")

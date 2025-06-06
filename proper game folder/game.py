@@ -125,7 +125,9 @@ class Map:
     running = True
     obstacles = [rect1, rect2, rect3, rect4, rect5]
     imgs = []
-    tutorial_done = False
+    tutorial1_done = False
+    tutorial1_inst = False
+    tutorial2_done = False
     combat_1 = False
     combat_2 = False
     combat_3 = False
@@ -146,9 +148,10 @@ class Map:
 
     def tutorialblits():
         cell_1.blits(cell_1)
-        win.blit(Map.batimg, (550, 550))
-        Textrender.blit_text(win, Map.tutorial_text, (800, 550), font, "red")
-        pygame.time.wait(1000)
+        win.blit(Map.batimg, (550, 150))
+        Textrender.blit_text(win, Map.tutorial_text, (700, 150), font, "red")
+        pygame.time.wait(5000)
+        pygame.display.update()
 
     def tutorial():
         Map.tutorialblits()
@@ -162,6 +165,7 @@ class Map:
         Map.tutorialblits()
         Map.tutorial_text = f"To heal yourself, just walk over to that campfire on the right side of this room and hold the 'E' key..."
         Map.tutorialblits()
+        Map.tutorial1_inst = True
     def tutorial2():
         Map.tutorial_text = f"Ah, dosen't that feel better? You can come back here at any point to heal using that same key at that campfire."
         Map.tutorialblits()
@@ -169,6 +173,7 @@ class Map:
         Map.tutorialblits()
         Map.tutorial_text = f"Goodbye, and good luck!"
         Map.tutorialblits()
+
     def mole_combat():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
@@ -222,7 +227,7 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(20)
 
-            result = fight.battle("Slime", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            result = fight.battle("Slime", 10, 100, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
             print(Stats.playerHP)
             while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
@@ -256,7 +261,7 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(10)
 
-            result = fight.battle("Bat", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            result = fight.battle("Bat", 20, 60, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 100)
             print(Stats.playerHP)
             while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
@@ -288,7 +293,7 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(10)
                 
-            result = fight.battle("Alien", 10, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            result = fight.battle("Alien", 25, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
 
             while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
@@ -380,15 +385,18 @@ class Map:
 
             elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
-                if Map.tutorial_done == False:
+                if Map.tutorial1_done == False:
+                    print("1")
                     Map.tutorial()
+                    print("2")
+                    Map.tutorial1_done = True
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
                     if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
                         Heal(100)
-                        Map.healed = True
-                        if Map.tutorial_done == False:
+                        Map.tutorial1_inst = False
+                        if Map.tutorial2_done == False:
                             Map.tutorial2()
-                            Map.tutorial_done = True
+                            Map.tutorial2_done = True
                         print(Stats.playerHP)
                         #for interacting with campfire
                 if player.top <= 0:
@@ -561,6 +569,10 @@ class cell_1(Map):
         else:
             win.blit(front, player)
 
+        if Map.tutorial1_inst == True:
+            Textrender.blit_text(win, Map.tutorial_text, (550, 150), font, "red")
+
+
 
 class cell_2(Map):
     rect1 = pygame.Rect(0, 0, 510, 800)
@@ -604,6 +616,7 @@ class cell_2(Map):
             win.blit(left, player)
         else:
             win.blit(front, player)
+
 
 class cell_3(Map):
     rect1 = pygame.Rect(0, 0, 440, 800)

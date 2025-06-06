@@ -112,7 +112,7 @@ class Map:
     slimedown = pygame.transform.scale(slime2, (100, 100))
     bigslime = pygame.transform.scale(slime3, (150, 150))
     batimg = pygame.transform.scale(bat, (50, 50))
-    alienguy = pygame.transform.scale(alienguy, (50, 50))
+    alienimg = pygame.transform.scale(alienguy, (50, 75))
     slime = babyslime
     
     #these variables get changed when cells are entered
@@ -209,7 +209,6 @@ class Map:
                 cell_change_anim(1000, 1, cell_3, cell_4)
                 Map.slime = Map.babyslime
                 Map.bigslime = pygame.transform.scale(Map.bigslime, (150, 150))
-
                 cell_4()
             else:
                 Map.combat_2 = True
@@ -242,19 +241,20 @@ class Map:
             if result == "player flees!":
                 Map.combat_3 = False
                 cell_change_anim(920, 1, cell_8, cell_6)
+                Map.batimg = pygame.transform.scale(bat, (50, 50))
                 cell_6()
             else:
                 Map.combat_3 = True
         
     def alien_combat():
         if not Map.combat_4:
-            win.blit(Map.alienguy, (950, 350))
+            win.blit(Map.alienimg, (950, 350))
             pygame.display.update()
             pygame.time.wait(2000)
             sound(encounter)
             for size in range(50, 2000, 50):
-                win.blits(((cell_6.colour, (0, 0)), (right, player), (Map.alienguy, ((950-size/1.3), (400-size/1.75)))))
-                Map.alienguy = pygame.transform.scale(Map.alienguy, (size, size))
+                win.blits(((cell_6.colour, (0, 0)), (right, player), (Map.alienimg, ((950-size/1.3), (400-size/1.75)))))
+                Map.alienimg = pygame.transform.scale(Map.alienimg, (size, size))
                 pygame.display.update()
                 pygame.time.wait(10)
                 
@@ -555,6 +555,8 @@ class cell_2(Map):
         Map.healthbarprint()
 
         if Map.combat_1 == False: #mole sprite, only if it hasnt been beaten
+            Map.moleimg = pygame.transform.scale(mole, (50, 50))
+
             win.blit(Map.moleimg, (550, 350))
             
         if Map.facing == "up":
@@ -696,7 +698,9 @@ class cell_6(Map):
         Map.healthbarprint()
         
         if not Map.combat_4:
-            win.blit(Map.alienguy, (950, 350))
+            Map.alienimg = pygame.transform.scale(alienguy, (50, 75))
+
+            win.blit(Map.alienimg, (950, 350))
         elif Map.combat_4 and not Map.gun_obtain:
             win.blit(raygun, self.gunrect)
             
@@ -770,6 +774,11 @@ class cell_8(Map):
     def blits(self):
         win.blit(self.colour, (0, 0))
         Map.healthbarprint()
+        
+        if not Map.combat_3:
+            Map.batimg = pygame.transform.scale(bat, (50, 50))
+
+            win.blit(Map.batimg, (550, 350))
 
         if Map.facing == "up":
             win.blit(back, player)

@@ -1,6 +1,7 @@
 import pygame
 import fight
 import stats
+import Textrender
 from healthbar import *
 from audio import *
 from outro import play_outro
@@ -52,6 +53,7 @@ raygun = pygame.image.load("images/ray_gun.png").convert_alpha()
 textboximage = pygame.image.load("images/TextBox.png").convert_alpha()
 font = pygame.font.Font('PanicStricken.ttf', 40)
 encounter = pygame.mixer.Sound(sound_collection[1])
+item_get = pygame.mixer.Sound(sound_collection[4])
 end = pygame.transform.scale(end, (1200, 800))
 player = front.get_rect(center=((window_width/2), (window_height/2)))
 
@@ -114,6 +116,8 @@ class Map:
     batimg = pygame.transform.scale(bat, (50, 50))
     alienimg = pygame.transform.scale(alienguy, (50, 75))
     slime = babyslime
+    tutorial_text = "Eh!?"
+    healed = False
     
     #these variables get changed when cells are entered
     bg = pygame.transform.scale(cave0, (1200, 800))
@@ -121,6 +125,7 @@ class Map:
     running = True
     obstacles = [rect1, rect2, rect3, rect4, rect5]
     imgs = []
+    tutorial_done = False
     combat_1 = False
     combat_2 = False
     combat_3 = False
@@ -139,6 +144,31 @@ class Map:
         if self.running == True:
             Map.game(Map.bg, Map.stage, Map.running)
 
+    def tutorialblits():
+        cell_1.blits(cell_1)
+        win.blit(Map.batimg, (550, 550))
+        Textrender.blit_text(win, Map.tutorial_text, (800, 550), font, "red")
+        pygame.time.wait(1000)
+
+    def tutorial():
+        Map.tutorialblits()
+        Map.tutorial_text = f"Well hello, stranger! It seems you have fallen into my wonderful cave. If you want to get out, you'll have to know these things..."
+        Map.tutorialblits()
+        Map.tutorial_text = f"The exit is a while ahead, not very hard of a walk. However, creatures roam these caves, and are hungry for a snack."
+        Map.tutorialblits()
+        Map.tutorial_text = f"To fight them, simply hit the 'attack' button when prompted. If you feel you can't defeat the enemy, flee to the previous room to organize yourself."
+        Map.tutorialblits()
+        Map.tutorial_text = f"Oh, it really looks like you're not in any shape to fight anyone right now! You really took a beating from that fall in here!"
+        Map.tutorialblits()
+        Map.tutorial_text = f"To heal yourself, just walk over to that campfire on the right side of this room and hold the 'E' key..."
+        Map.tutorialblits()
+    def tutorial2():
+        Map.tutorial_text = f"Ah, dosen't that feel better? You can come back here at any point to heal using that same key at that campfire."
+        Map.tutorialblits()
+        Map.tutorial_text = f"It looks like you're all set! Oh, before I forget, there are also items scattered around these caves. They are sure to help, if you find one simply walk over it to grab it."
+        Map.tutorialblits()
+        Map.tutorial_text = f"Goodbye, and good luck!"
+        Map.tutorialblits()
     def mole_combat():
         #can call combat function here, makes it not repeat upon re-entering room
         if Map.combat_1 == False:
@@ -278,6 +308,7 @@ class Map:
             gainStrength(5)
         elif item == "raygun":
             gainStrength(10)
+        sound(item_get)
         Map.obtain_message = font.render(f"You have obtained the {item}!", True, "red")
         textboximg = pygame.transform.scale(textboximage, (600, 50))
         #textboxrect = textboximage.get_rect()
@@ -349,9 +380,15 @@ class Map:
 
             elif cell == "main":
                 cell_1.blits(cell_1) #displays sprites
+                if Map.tutorial_done == False:
+                    Map.tutorial()
                 if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
                     if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
                         Heal(100)
+                        Map.healed = True
+                        if Map.tutorial_done == False:
+                            Map.tutorial2()
+                            Map.tutorial_done = True
                         print(Stats.playerHP)
                         #for interacting with campfire
                 if player.top <= 0:

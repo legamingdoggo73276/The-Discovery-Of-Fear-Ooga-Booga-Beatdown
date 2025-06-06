@@ -2,11 +2,10 @@ import pygame
 
 #Starting stats
 class Stats:
-    basePlayerHP = 100
     baseStr = 10
     playerStr = 10
     maxPHP = 100
-    playerHP = 100
+    playerHP = 10
     playerSpeed = 10
 
 def gainHealth(gain):

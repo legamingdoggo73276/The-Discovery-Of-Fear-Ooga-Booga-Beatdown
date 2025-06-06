@@ -48,6 +48,7 @@ left = pygame.image.load("images/left.png").convert_alpha()
 fire = pygame.image.load("images/fire.png").convert_alpha()
 rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
+raygun = pygame.image.load("images/ray_gun.png").convert_alpha()
 textboximage = pygame.image.load("images/TextBox.png").convert_alpha()
 font = pygame.font.Font('PanicStricken.ttf', 40)
 encounter = pygame.mixer.Sound(sound_collection[1])
@@ -125,6 +126,7 @@ class Map:
     combat_3 = False
     combat_4 = False
     spear_obtain = False
+    gun_obtain = False
     facing = "down"
     obtain_message = "Error"
                 
@@ -205,6 +207,9 @@ class Map:
             if result == "player flees!":
                 Map.combat_2 = False
                 cell_change_anim(1000, 1, cell_3, cell_4)
+                Map.slime = Map.babyslime
+                Map.bigslime = pygame.transform.scale(Map.bigslime, (150, 150))
+
                 cell_4()
             else:
                 Map.combat_2 = True
@@ -271,8 +276,8 @@ class Map:
     def item_obtain(item):
         if item == "spear":
             gainStrength(5)
-        #elif item == "raygun":
-            #gainStrength(10)
+        elif item == "raygun":
+            gainStrength(10)
         Map.obtain_message = font.render(f"You have obtained the {item}!", True, "red")
         textboximg = pygame.transform.scale(textboximage, (600, 50))
         #textboxrect = textboximage.get_rect()
@@ -369,7 +374,7 @@ class Map:
                     cell_4()
 
             #cell_3 stuff (up twice from main)
-            elif cell == "up2":
+            elif cell == "bridge":
                 cell_3.blits(cell_3)
                 if player.bottom >= window_height:
                     cell_change_anim(1000, 1, cell_3, cell_4)
@@ -412,6 +417,10 @@ class Map:
             
             elif cell == "curve":
                 cell_6.blits(cell_6)
+                if player.colliderect(cell_6.gunrect) and not Map.gun_obtain:
+                    Map.gun_obtain = True
+                    Map.item_obtain("raygun")
+                    print(Stats.playerStr)
                 if player.left <= 0:
                     cell_change_anim((window_width - 101), 280, cell_6, cell_5)
                     cell_5()
@@ -426,22 +435,21 @@ class Map:
                     cell_6()
                 elif player.top <= 0:
                     cell_change_anim(550, (window_height - 101), cell_8, cell_9)
-                    cell = "void"
+                    cell_9()
 
             elif cell == "right":
                 if player.left <= 0:
                     cell_change_anim((window_width - 101), player_y, cell_4, cell_1)
                     cell_1()
 
-            elif cell == "void":
+            elif cell == "wellesley":
+                cell_9.blits(cell_9)
                 global outro_played
-                if not outro_played:
+                if not outro_played and player.colliderect(cell_9.bench):
                     ending_fade()
                     play_outro(win)
                     outro_played = True
                     pygame.quit()
-                else:
-                    cell_9.blits(cell_9)
 
             pygame.display.update()
 
@@ -562,7 +570,7 @@ class cell_3(Map):
     rect1 = pygame.Rect(0, 0, 440, 800)
     rect2 = pygame.Rect(750, 0, 450, 800)
     colour = pygame.transform.scale(cave3, (window_width, window_height))
-    stage = "up2"
+    stage = "bridge"
     rects = [rect1, rect2]
 
     def __init__(self):
@@ -586,7 +594,7 @@ class cell_3(Map):
         if Map.slime != Map.bigslime and Map.combat_2 == False:
             win.blit(Map.slime, (550, 350))
         elif Map.slime == Map.bigslime and Map.combat_2 == False:
-                    win.blit(Map.slime, (500, 300))
+            win.blit(Map.bigslime, (500, 300))
 
 
         if Map.facing == "up":
@@ -667,6 +675,7 @@ class cell_6(Map):
     rect2 = pygame.Rect(0, 0, 800, 360)
     rect3 = pygame.Rect(1120, 0, 80, 800)
     rect4 = pygame.Rect(800, 525, 400, 275)
+    gunrect = raygun.get_rect(center=(950, 350))
     colour = pygame.transform.scale(bend, (window_width, window_height))
     stage = "curve"
     rects = [rect1, rect2, rect3, rect4]
@@ -688,6 +697,9 @@ class cell_6(Map):
         
         if not Map.combat_4:
             win.blit(Map.alienguy, (950, 350))
+        elif Map.combat_4 and not Map.gun_obtain:
+            win.blit(raygun, self.gunrect)
+            
 
         if Map.facing == "up":
             win.blit(back, player)
@@ -726,7 +738,7 @@ class cell_7(Map):
         Map.healthbarprint()
         
         if Map.spear_obtain == False:
-            win.blit(self.spearimg, (400, 400))
+            win.blit(self.spearimg, self.spearrect)
         
         if Map.facing == "up":
             win.blit(back, player)
@@ -770,10 +782,11 @@ class cell_8(Map):
 
 class cell_9(Map):
     #rect for when player meets bench :]
-    #rect1 = pygame.Rect()
+    bench = pygame.Rect(150, 25, 90, 170)
+    rect1 = pygame.Rect(790, 0, 410, 800)
     colour = pygame.transform.scale(void, (window_width, window_height))
-    stage = "blank"
-    rects = []
+    stage = "wellesley"
+    rects = [rect1]
     def __init__(self):
         global current_music
         if current_music != void_audio:
@@ -782,6 +795,7 @@ class cell_9(Map):
         Map.bg = self.colour
         Map.stage = self.stage
         Map.obstacles = self.rects
+        Map()
     
     def blits(self):
         win.blit(self.colour, (0, 0))

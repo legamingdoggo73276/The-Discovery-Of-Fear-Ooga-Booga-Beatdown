@@ -98,7 +98,4 @@ while running:
             
             
             blits()
-            def blits():
-                win.blits(((start, (0, 0)), (image1, (button.x, button.y)), (image2, (button2.x, button2.y)), (surf, (button.x +10, button.y + 5)), (surf2, (button2.x +10, button2.y +5))))
-
             pygame.display.update()

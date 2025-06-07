@@ -57,7 +57,6 @@ def starting_fade():
         pygame.time.wait(30)
         alpha -= 5
 
-
 running = True
 while running:
         #for loop so the close button works: DO NOT MODIFY  

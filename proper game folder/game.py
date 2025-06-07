@@ -293,7 +293,7 @@ class Map:
                 pygame.display.update()
                 pygame.time.wait(10)
                 
-            result = fight.battle("Alien", 25, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
+            result = fight.battle("Alien", 20, 50, Stats.playerStr, Stats.playerHP, Stats.playerSpeed, 10)
 
             while Stats.playerHP <= 0:
                 win.blit(end, (0, 0))
@@ -316,7 +316,6 @@ class Map:
         sound(item_get)
         Map.obtain_message = font.render(f"You have obtained the {item}!", True, "red")
         textboximg = pygame.transform.scale(textboximage, (600, 50))
-        #textboxrect = textboximage.get_rect()
         win.blits(((textboximg, (450, 500)), (Map.obtain_message, (500, 500))))
         win.blit(Map.obtain_message, (500, 500))
         pygame.display.update()

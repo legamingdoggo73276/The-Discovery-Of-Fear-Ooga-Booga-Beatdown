@@ -150,7 +150,7 @@ class Map:
         cell_1.blits(cell_1)
         win.blit(Map.batimg, (550, 150))
         Textrender.blit_text(win, Map.tutorial_text, (700, 150), font, "red")
-        pygame.time.wait(5000)
+        pygame.time.wait(4000)
         pygame.display.update()
 
     def tutorial():

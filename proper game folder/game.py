@@ -47,7 +47,6 @@ back = pygame.image.load("images/back.png").convert_alpha()
 right = pygame.image.load('images/right.png').convert_alpha()
 left = pygame.image.load("images/left.png").convert_alpha()
 fire = pygame.image.load("images/fire.png").convert_alpha()
-rock = pygame.image.load("images/rock.png").convert_alpha()
 end = pygame.image.load("images/death.png").convert_alpha()
 raygun = pygame.image.load("images/ray_gun.png").convert_alpha()
 textboximage = pygame.image.load("images/TextBox.png").convert_alpha()
@@ -150,8 +149,8 @@ class Map:
         cell_1.blits(cell_1)
         win.blit(Map.batimg, (550, 150))
         Textrender.blit_text(win, Map.tutorial_text, (700, 150), font, "red")
-        pygame.time.wait(4000)
         pygame.display.update()
+        pygame.time.wait(4000)
 
     def tutorial():
         Map.tutorialblits()
@@ -389,8 +388,8 @@ class Map:
                     Map.tutorial()
                     print("2")
                     Map.tutorial1_done = True
-                if cell_1.obstacle_3.left - player.right < speed and cell_1.obstacle_3.left - player.right > -130 and keys[pygame.K_e]:
-                    if cell_1.obstacle_3.top - player.bottom < speed and cell_1.obstacle_3.bottom - player.top > -10:
+                if cell_1.fire_rect.left - player.right < speed and cell_1.fire_rect.left - player.right > -130 and keys[pygame.K_e]:
+                    if cell_1.fire_rect.top - player.bottom < speed and cell_1.fire_rect.bottom - player.top > -10:
                         Heal(100)
                         Map.tutorial1_inst = False
                         if Map.tutorial2_done == False:
@@ -399,10 +398,11 @@ class Map:
                         print(Stats.playerHP)
                         #for interacting with campfire
                 if player.top <= 0:
-                    #calls the fade animation
-                    cell_change_anim(550, (window_height - 101), cell_1, cell_2)
-                    #calls cell_2 function
-                    cell_2()
+                    if Map.tutorial2_done:
+                        #calls the fade animation
+                        cell_change_anim(550, (window_height - 101), cell_1, cell_2)
+                        #calls cell_2 function
+                        cell_2()
                 elif player.bottom >= window_height:
                     cell_change_anim(550, 1, cell_1, starting_cell)
                     starting_cell()
@@ -535,16 +535,13 @@ class cell_1(Map):
     rect4 = pygame.Rect(0, 0, 510, 180)
     rect5 = pygame.Rect(0, 0, 135, 800)
     rect6 = pygame.Rect(0, 625, 500, 175)
-    img_1 = pygame.transform.scale(rock, (200, 100))
-    img_2 = pygame.transform.scale(rock, (500, 100))
-    img_3 = pygame.transform.scale(fire, (100, 100))
-    obstacle_1 = img_1.get_rect(center=(300, 300))
-    obstacle_2 = img_2.get_rect(center=(700, 700))
-    obstacle_3 = img_3.get_rect(center=(1000, 400))
+    fire_img = pygame.transform.scale(fire, (100, 100))
+    fire_rect = fire_img.get_rect(center=(1000, 400))
+
     bg = pygame.transform.scale(cave1, (window_width, window_height))
     stage = "main"
-    rects = [rect1, rect2, rect3, rect4, rect5, rect6, obstacle_3]
-    imgs = [img_1, img_2, img_3]
+    rects = [rect1, rect2, rect3, rect4, rect5, rect6, fire_rect]
+    imgs = [fire_img]
     def __init__(self):
         #replaces variables in Map class with ones from this class
         Map.stage = self.stage
@@ -555,7 +552,7 @@ class cell_1(Map):
     def blits(self):
         #blits all the sprites for this room on the screen
         #the line under this is the background and the campfire
-        win.blits(((self.bg, (0,0)), (self.imgs[2], self.rects[6])))
+        win.blits(((self.bg, (0,0)), (self.imgs[0], self.rects[6])))
         Map.healthbarprint()
 
         #blits a different version of the caveman depending on which way you're facing
@@ -576,14 +573,10 @@ class cell_1(Map):
 class cell_2(Map):
     rect1 = pygame.Rect(0, 0, 510, 800)
     rect2 = pygame.Rect(680, 0, 510, 800)
-    img_1 = pygame.transform.scale(rock, (100, 100))
-    img_2 = pygame.transform.scale(rock, (300, 100))
-    obstacle_1 = img_1.get_rect(center=(100, 100))
-    obstacle_2 = img_2.get_rect(center=(500, 500))
     colour = pygame.transform.scale(cave2, (window_width, window_height))
     stage = "up"
     rects = [rect1, rect2]
-    imgs = [img_1, img_2]
+    imgs = []
     
     def __init__(self):
         global current_music

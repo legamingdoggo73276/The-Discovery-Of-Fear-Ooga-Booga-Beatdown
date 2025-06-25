@@ -32,8 +32,10 @@ slime = pygame.image.load("images/slimecombat.png").convert_alpha()
 slime = pygame.transform.scale(slime, (window_width, window_height))
 dead_slime = pygame.image.load("images/dead_slime.png").convert_alpha()
 dead_slime = pygame.transform.scale(dead_slime, (1200, 800))
-bat = pygame.image.load("images/batREAL.png").convert_alpha()
+bat = pygame.image.load("images/bat_fight.png").convert_alpha()
 bat = pygame.transform.scale(bat, (1200, 800))
+dead_bat = pygame.image.load("images/bat_dead.png").convert_alpha()
+dead_bat = pygame.transform.scale(dead_bat, (1200, 800))
 alienfight = pygame.image.load("images/alienfight.png").convert_alpha()
 alienfight = pygame.transform.scale(alienfight, (1200, 800))
 dead_alien = pygame.image.load("images/alien_dead.png").convert_alpha()
@@ -87,7 +89,7 @@ def slime_victory_blits():
     pygame.time.wait(2000)
 
 def bat_victory_blits():
-    combat.blits(((image1, (0,0)), (victory_text, (600,400))))
+    combat.blits(((dead_bat, (0,0)), (victory_text, (600,400))))
     pygame.display.update()
     pygame.time.wait(2000)
     
